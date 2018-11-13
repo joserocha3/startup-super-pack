@@ -23,7 +23,7 @@ Once on board your customers will need somewhere to login and load their content
 
 ### GatsbyJS
 
-Wow potential customers an informative, fast static site.
+Wow potential customers with an informative, fast static site.
 
 Coming soon!
 
