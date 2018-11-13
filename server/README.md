@@ -1,12 +1,12 @@
-# Firebase Authentication GraphQL Starter - Server
+# Startup Super Pack - Server
 
 ## Getting Started
 
 These instructions will get a copy of an _application server_ up and running on your local machine. Make sure you already have `yarn`, `prisma-cli` and `node` (version 10 or greater) installed.
 
-These steps will allow for local development of the _application server_ on your machine. The database is not run locally, but is connected to your _Prisma development server_. 
+These steps will allow for local development of the _application server_ on your machine. The database is not run locally, but is connected to your _Prisma development server_.
 
->It is possible to run a Prisma server and database locally using Docker. If you wish to do so, the [Prisma documentation](https://www.prisma.io/docs/1.20/get-started/01-setting-up-prisma-new-database-JAVASCRIPT-a002/) has instructions.
+> It is possible to run a Prisma server and database locally using Docker. If you wish to do so, the [Prisma documentation](https://www.prisma.io/docs/1.20/get-started/01-setting-up-prisma-new-database-JAVASCRIPT-a002/) has instructions.
 
 1. Clone this repository
 2. Set your environment variables in `example.env`
@@ -15,10 +15,11 @@ These steps will allow for local development of the _application server_ on your
 5. Run `yarn start` to start the server locally
 6. In your browser open `http://localhost:4000/` to access the application's GraphQL Playground
 7. Enter the following in the HTTP HEADERS section, replace `AUTH_TEST_TOKEN` with the value found in the `.env` file:
+
 ```json
-  {
-    "Authorization": "Bearer AUTH_TEST_TOKEN"
-  }
+{
+  "Authorization": "Bearer AUTH_TEST_TOKEN"
+}
 ```
 
 ## Deploying

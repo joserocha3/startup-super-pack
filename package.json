@@ -25,5 +25,14 @@
       "eslint --fix src",
       "git add"
     ]
-  }
+  },
+  "keywords": [
+    "graphql",
+    "prisma",
+    "nodejs",
+    "react",
+    "styled-components",
+    "gatsbyjs",
+    "startup"
+  ]
 }
