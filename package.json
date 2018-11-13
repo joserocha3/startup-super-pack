@@ -3,7 +3,6 @@
   "repository": "https://github.com/joserocha3/super-startup-pack.git",
   "author": "Pablo Rocha",
   "license": "MIT",
-  "scripts": {},
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "eslint": "^5.6.0",
@@ -15,7 +14,9 @@
     "lint-staged": "^8.0.4"
   },
   "eslintIgnore": [
-    "**/{generated,build,public}/**"
+    "**/dist",
+    "**/generated",
+    "**/build"
   ],
   "hooks": {
     "pre-commit": "lint-staged"
@@ -33,6 +34,7 @@
     "react",
     "styled-components",
     "gatsbyjs",
-    "startup"
+    "startup",
+    "boilerplate"
   ]
 }
