@@ -1,0 +1,42 @@
+# This file contains the application server schema. Here we only
+# expose fields we want accesible from the client.
+
+directive @isAuthenticated(checkIfEmailIsVerified: Boolean = false) on FIELD | FIELD_DEFINITION
+directive @hasRole(roles: [String]) on FIELD | FIELD_DEFINITION
+
+"""
+This value controls user authorization to execute specific actions.
+"""
+enum Role {
+  ADMIN
+  CLIENT
+}
+
+"""
+A user of this software. This user can login under an assigned role.
+"""
+type User {
+  id: ID!
+  email: String!
+  firstName: String!
+  lastName: String!
+  role: Role!
+}
+
+type Query {
+  """
+  Returns a single user's information.
+  """
+  me: User @isAuthenticated
+  """
+  Returns a list of all users.
+  """
+  users: [User!]! @hasRole(roles:["test"])
+}
+
+type Mutation {
+  """
+  Create a single user.
+  """
+  createUser(email: String!, password: String!, firstName: String!, lastName: String!, role: Role!): User @hasRole(roles:["ADMIN"])
+}

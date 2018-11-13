@@ -1,0 +1,29 @@
+{
+  "name": "super-startup-pack",
+  "repository": "https://github.com/joserocha3/super-startup-pack.git",
+  "author": "Pablo Rocha",
+  "license": "MIT",
+  "scripts": {},
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.6.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
+    "husky": "^1.1.4",
+    "lint-staged": "^8.0.4"
+  },
+  "eslintIgnore": [
+    "**/{generated,build,public}/**"
+  ],
+  "hooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "{client,server,gatsby}/**/*.{js,jsx,json,css,md}": [
+      "eslint --fix src",
+      "git add"
+    ]
+  }
+}

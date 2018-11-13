@@ -1,0 +1,13 @@
+enum UserRole {
+  ADMIN
+  CLIENT
+}
+
+type User {
+  id: ID! @unique
+  email: String! @unique
+  authId: String @unique
+  firstName: String!
+  lastName: String!
+  role: UserRole!
+}

@@ -1,0 +1,18 @@
+# Covers general files and directories
+
+node_modules
+dist
+build
+package-lock.json
+.env*
+!example.env
+*.log
+.DS_Store
+
+# Covers Visual Studio Code
+
+.vscode
+
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
+
+.idea
