@@ -21,7 +21,7 @@ Once on board your customers will need somewhere to login and load their content
   - `eslint` integration removed
   - Better debugging `styled-components`
 
-### GatsbyJS
+### Website
 
 Wow potential customers with an informative, fast static site.
 
