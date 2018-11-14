@@ -1,10 +1,13 @@
 {
-  "env": {
-    "node": true
-  },
-  "extends": "airbnb-base",
-  "parser": "babel-eslint",
-  "rules": {
-    "semi": ["error", "never"]
-  }
+    "env": {
+        "node": true
+    },
+    "extends": "airbnb-base",
+    "parser": "babel-eslint",
+    "rules": {
+        "semi": [
+            "error",
+            "never"
+        ]
+    }
 }
