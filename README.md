@@ -1,6 +1,6 @@
 # Startup Super Pack
 
-Bootstrap your startup! Everything you need to start you first SaaS, consulting agency, marketing firm, developer collective, etc.
+Bootstrap your startup! Everything you need to start your first SaaS, consulting agency, marketing firm, developer collective, etc.
 
 ## Features
 
