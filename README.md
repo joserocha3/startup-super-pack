@@ -6,7 +6,7 @@ Bootstrap your startup! Everything you need to start your first SaaS, consulting
 
 ### Server
 
-The back-end will be the heart of you startup.
+The back-end will be the heart  startup.
 
 - GraphQL with Apollo V2
 - Database setup via Prisma
@@ -15,7 +15,7 @@ The back-end will be the heart of you startup.
 
 ### Client
 
-Once on board your customers will need somewhere to login and load their content.
+Once on board your customers will need somewhere to login to use your service.
 
 - Custom `create-react-app` with and
   - `eslint` integration removed
