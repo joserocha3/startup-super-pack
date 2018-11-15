@@ -3,6 +3,9 @@
   "repository": "https://github.com/joserocha3/super-startup-pack.git",
   "author": "Pablo Rocha",
   "license": "MIT",
+  "scripts": {
+    "lint": "eslint --fix"
+  },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "eslint": "^5.9.0",
@@ -12,20 +15,6 @@
     "eslint-plugin-react": "^7.11.1",
     "husky": "^1.1.4",
     "lint-staged": "^8.0.4"
-  },
-  "eslintIgnore": [
-    "**/dist",
-    "**/generated",
-    "**/build"
-  ],
-  "hooks": {
-    "pre-commit": "lint-staged"
-  },
-  "lint-staged": {
-    "**/src/**/*.{js,jsx,json,css,md}": [
-      "eslint --fix src",
-      "git add"
-    ]
   },
   "keywords": [
     "graphql",
