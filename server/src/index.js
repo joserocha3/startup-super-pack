@@ -6,7 +6,7 @@ import { prisma } from './generated/prisma-client'
 import resolvers from './resolvers'
 import directiveResolvers from './schema/directiveResolvers'
 import schemaDirectives from './schema/schemaDirectives'
-import auth, { getUser } from './utils/auth';
+import auth, { getUser } from './utils/auth'
 
 // Build application context
 
@@ -18,7 +18,7 @@ const context = async ({ req }) => {
   } // pass into getUser with ease
   return {
     ...params,
-    user: await getUser({ ...params })
+    user: await getUser({ ...params }),
   }
 }
 

@@ -11,10 +11,22 @@
     "eslint": "^5.9.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-json": "^1.2.1",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
     "husky": "^1.1.4",
     "lint-staged": "^8.0.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,json,md}": [
+      "yarn lint",
+      "git add"
+    ]
   },
   "keywords": [
     "graphql",

@@ -8,6 +8,9 @@
         "airbnb"
     ],
     "parser": "babel-eslint",
+    "plugins": [
+        "json"
+    ],
     "rules": {
         "react/jsx-filename-extension": "off",
         "semi": [
