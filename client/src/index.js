@@ -1,8 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createGlobalStyle } from 'styled-components'
+import ApolloClient from 'apollo-boost'
+import { ApolloProvider } from 'react-apollo'
 
-import App from './App'
+import App from './components/App'
 import * as serviceWorker from './serviceWorker'
 
 const GlobalStyle = createGlobalStyle`
@@ -22,11 +24,15 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
+const client = new ApolloClient({
+  uri: 'https://startup-super-pack.herokuapp.com',
+})
+
 ReactDOM.render(
-  <>
+  <ApolloProvider client={client}>
     <App />
     <GlobalStyle />
-  </>, document.getElementById('root'),
+  </ApolloProvider>, document.getElementById('root'),
 )
 
 // If you want your app to work offline and load faster, you can change

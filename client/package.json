@@ -10,11 +10,15 @@
   },
   "dependencies": {
     "@nomoreanalog/react-scripts-eslintless": "^2.1.5",
+    "apollo-boost": "^0.1.20",
+    "graphql": "^14.0.2",
     "react": "^16.6.3",
+    "react-apollo": "^2.2.4",
     "react-dom": "^16.6.3",
     "styled-components": "^4.1.1"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
     "babel-plugin-styled-components": "^1.8.0",
     "eslint": "^5.9.0",
     "eslint-config-airbnb": "^17.1.0",
