@@ -22,7 +22,7 @@
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "{client,server,gatsby}/src/**/*.{js,jsx,json,css,md}": [
+    "**/src/**/*.{js,jsx,json,css,md}": [
       "eslint --fix src",
       "git add"
     ]

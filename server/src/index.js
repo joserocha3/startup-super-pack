@@ -18,7 +18,7 @@ const context = async ({ req }) => {
   } // pass into getUser with ease
   return {
     ...params,
-    user: await getUser({ ...params }),
+    user: await getUser({ ...params })
   }
 }
 
@@ -31,7 +31,7 @@ const server = new ApolloServer({
   resolvers,
   directiveResolvers,
   schemaDirectives,
-  context
+  context,
 })
 
 // Run the graphql server
