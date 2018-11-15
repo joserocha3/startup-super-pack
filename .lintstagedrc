@@ -1,6 +1,6 @@
 {
   "lint-staged": {
-    "**/src/**/*.{js,jsx,json,css,md}": [
+    "**/*.{js,jsx,json,css,md}": [
       "yarn lint",
       "git add"
     ]
