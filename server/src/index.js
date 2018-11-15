@@ -31,7 +31,7 @@ const server = new ApolloServer({
   resolvers,
   directiveResolvers,
   schemaDirectives,
-  context,
+  context
 })
 
 // Run the graphql server

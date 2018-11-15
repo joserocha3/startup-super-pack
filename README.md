@@ -4,22 +4,26 @@ Bootstrap your startup! Everything you need to start your first SaaS, consulting
 
 ## Features
 
+### Overview
+
+All facets of this project are GraphQL centric. We love GraphQL and think you will too!
+
 ### Server
 
 The back-end will be the heart  startup.
 
-- GraphQL with Apollo V2
-- Database setup via Prisma
-- Heroku deployment ready
-- Built in user management with Firebase authentication
+- Served using Apollo V2
+- Database layer provided by Prisma
+- Heroku deployment ready Procfile
+- Built authentication with Firebase
 
 ### Client
 
 Once on board your customers will need somewhere to login to use your service.
 
-- Custom `create-react-app` with and
+- Custom `create-react-app` --> [found out more](https://github.com/joserocha3/create-react-app-eslintless)!
   - `eslint` integration removed
-  - Better debugging `styled-components`
+  - Better debugging for `styled-components`
 - Sign up and login using Firebase authentication
 - Styling with `styled-components`
 
