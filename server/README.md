@@ -59,8 +59,8 @@ List of commands found in `package.json`. Most of the actions you need to perfor
 ├── src
 │   ├── generated
 │   ├── resolvers
-│   │   ├── mutations (one file per graphQL `type`)
-│   │   ├── queries (one file per graphQL `type`)
+│   │   ├── Mutation (one file per graphQL `type`)
+│   │   ├── Query (one file per graphQL `type`)
 │   │   └── index.js (export all mutations and queries)
 │   ├── schema
 │   │   ├── directiveResolver.js

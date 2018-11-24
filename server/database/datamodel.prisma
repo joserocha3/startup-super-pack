@@ -9,5 +9,26 @@ type User {
   authId: String @unique
   firstName: String!
   lastName: String!
-  role: UserRole!
+  role: UserRole!  
+  equipment: [Equipment!]!
+}
+
+type EquipmentType {
+  id: ID! @unique
+  description: String!
+}
+
+type Equipment {
+  id: ID! @unique
+  description: String!
+  type: EquipmentType!
+  owner: User!
+}
+
+type Availability {
+  id: ID! @unique
+  equipment: Equipment!
+  start: DateTime!
+  end: DateTime!
+  booked: Boolean! @default(value: "false")
 }

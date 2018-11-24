@@ -1,17 +1,13 @@
 module.exports = {
-        typeDefs: /* GraphQL */ `type AggregateCrossing {
+        typeDefs: /* GraphQL */ `type AggregateAvailability {
   count: Int!
 }
 
-type AggregateGeofence {
+type AggregateEquipment {
   count: Int!
 }
 
-type AggregateRedemption {
-  count: Int!
-}
-
-type AggregateReward {
+type AggregateEquipmentType {
   count: Int!
 }
 
@@ -19,318 +15,295 @@ type AggregateUser {
   count: Int!
 }
 
+type Availability {
+  id: ID!
+  equipment: Equipment!
+  start: DateTime!
+  end: DateTime!
+  booked: Boolean!
+}
+
+type AvailabilityConnection {
+  pageInfo: PageInfo!
+  edges: [AvailabilityEdge]!
+  aggregate: AggregateAvailability!
+}
+
+input AvailabilityCreateInput {
+  equipment: EquipmentCreateOneInput!
+  start: DateTime!
+  end: DateTime!
+  booked: Boolean
+}
+
+type AvailabilityEdge {
+  node: Availability!
+  cursor: String!
+}
+
+enum AvailabilityOrderByInput {
+  id_ASC
+  id_DESC
+  start_ASC
+  start_DESC
+  end_ASC
+  end_DESC
+  booked_ASC
+  booked_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type AvailabilityPreviousValues {
+  id: ID!
+  start: DateTime!
+  end: DateTime!
+  booked: Boolean!
+}
+
+type AvailabilitySubscriptionPayload {
+  mutation: MutationType!
+  node: Availability
+  updatedFields: [String!]
+  previousValues: AvailabilityPreviousValues
+}
+
+input AvailabilitySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: AvailabilityWhereInput
+  AND: [AvailabilitySubscriptionWhereInput!]
+  OR: [AvailabilitySubscriptionWhereInput!]
+  NOT: [AvailabilitySubscriptionWhereInput!]
+}
+
+input AvailabilityUpdateInput {
+  equipment: EquipmentUpdateOneRequiredInput
+  start: DateTime
+  end: DateTime
+  booked: Boolean
+}
+
+input AvailabilityWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  equipment: EquipmentWhereInput
+  start: DateTime
+  start_not: DateTime
+  start_in: [DateTime!]
+  start_not_in: [DateTime!]
+  start_lt: DateTime
+  start_lte: DateTime
+  start_gt: DateTime
+  start_gte: DateTime
+  end: DateTime
+  end_not: DateTime
+  end_in: [DateTime!]
+  end_not_in: [DateTime!]
+  end_lt: DateTime
+  end_lte: DateTime
+  end_gt: DateTime
+  end_gte: DateTime
+  booked: Boolean
+  booked_not: Boolean
+  AND: [AvailabilityWhereInput!]
+  OR: [AvailabilityWhereInput!]
+  NOT: [AvailabilityWhereInput!]
+}
+
+input AvailabilityWhereUniqueInput {
+  id: ID
+}
+
 type BatchPayload {
   count: Long!
 }
 
-type Crossing {
-  crossedIn: DateTime
-  crossedOut: DateTime
-  geofence: ID
-  coordinates: String
-  crosser: User
-}
-
-type CrossingConnection {
-  pageInfo: PageInfo!
-  edges: [CrossingEdge]!
-  aggregate: AggregateCrossing!
-}
-
-input CrossingCreateInput {
-  crossedIn: DateTime
-  crossedOut: DateTime
-  geofence: ID
-  coordinates: String
-  crosser: UserCreateOneWithoutCrossingsInput
-}
-
-input CrossingCreateManyWithoutCrosserInput {
-  create: [CrossingCreateWithoutCrosserInput!]
-  connect: [CrossingWhereUniqueInput!]
-}
-
-input CrossingCreateWithoutCrosserInput {
-  crossedIn: DateTime
-  crossedOut: DateTime
-  geofence: ID
-  coordinates: String
-}
-
-type CrossingEdge {
-  node: Crossing!
-  cursor: String!
-}
-
-enum CrossingOrderByInput {
-  crossedIn_ASC
-  crossedIn_DESC
-  crossedOut_ASC
-  crossedOut_DESC
-  geofence_ASC
-  geofence_DESC
-  coordinates_ASC
-  coordinates_DESC
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type CrossingPreviousValues {
-  crossedIn: DateTime
-  crossedOut: DateTime
-  geofence: ID
-  coordinates: String
-}
-
-type CrossingSubscriptionPayload {
-  mutation: MutationType!
-  node: Crossing
-  updatedFields: [String!]
-  previousValues: CrossingPreviousValues
-}
-
-input CrossingSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: CrossingWhereInput
-  AND: [CrossingSubscriptionWhereInput!]
-  OR: [CrossingSubscriptionWhereInput!]
-  NOT: [CrossingSubscriptionWhereInput!]
-}
-
-input CrossingUpdateInput {
-  crossedIn: DateTime
-  crossedOut: DateTime
-  geofence: ID
-  coordinates: String
-  crosser: UserUpdateOneWithoutCrossingsInput
-}
-
-input CrossingUpdateManyMutationInput {
-  crossedIn: DateTime
-  crossedOut: DateTime
-  geofence: ID
-  coordinates: String
-}
-
-input CrossingUpdateManyWithoutCrosserInput {
-  create: [CrossingCreateWithoutCrosserInput!]
-  delete: [CrossingWhereUniqueInput!]
-  connect: [CrossingWhereUniqueInput!]
-  disconnect: [CrossingWhereUniqueInput!]
-  update: [CrossingUpdateWithWhereUniqueWithoutCrosserInput!]
-  upsert: [CrossingUpsertWithWhereUniqueWithoutCrosserInput!]
-}
-
-input CrossingUpdateWithoutCrosserDataInput {
-  crossedIn: DateTime
-  crossedOut: DateTime
-  geofence: ID
-  coordinates: String
-}
-
-input CrossingUpdateWithWhereUniqueWithoutCrosserInput {
-  where: CrossingWhereUniqueInput!
-  data: CrossingUpdateWithoutCrosserDataInput!
-}
-
-input CrossingUpsertWithWhereUniqueWithoutCrosserInput {
-  where: CrossingWhereUniqueInput!
-  update: CrossingUpdateWithoutCrosserDataInput!
-  create: CrossingCreateWithoutCrosserInput!
-}
-
-input CrossingWhereInput {
-  crossedIn: DateTime
-  crossedIn_not: DateTime
-  crossedIn_in: [DateTime!]
-  crossedIn_not_in: [DateTime!]
-  crossedIn_lt: DateTime
-  crossedIn_lte: DateTime
-  crossedIn_gt: DateTime
-  crossedIn_gte: DateTime
-  crossedOut: DateTime
-  crossedOut_not: DateTime
-  crossedOut_in: [DateTime!]
-  crossedOut_not_in: [DateTime!]
-  crossedOut_lt: DateTime
-  crossedOut_lte: DateTime
-  crossedOut_gt: DateTime
-  crossedOut_gte: DateTime
-  geofence: ID
-  geofence_not: ID
-  geofence_in: [ID!]
-  geofence_not_in: [ID!]
-  geofence_lt: ID
-  geofence_lte: ID
-  geofence_gt: ID
-  geofence_gte: ID
-  geofence_contains: ID
-  geofence_not_contains: ID
-  geofence_starts_with: ID
-  geofence_not_starts_with: ID
-  geofence_ends_with: ID
-  geofence_not_ends_with: ID
-  coordinates: String
-  coordinates_not: String
-  coordinates_in: [String!]
-  coordinates_not_in: [String!]
-  coordinates_lt: String
-  coordinates_lte: String
-  coordinates_gt: String
-  coordinates_gte: String
-  coordinates_contains: String
-  coordinates_not_contains: String
-  coordinates_starts_with: String
-  coordinates_not_starts_with: String
-  coordinates_ends_with: String
-  coordinates_not_ends_with: String
-  crosser: UserWhereInput
-  AND: [CrossingWhereInput!]
-  OR: [CrossingWhereInput!]
-  NOT: [CrossingWhereInput!]
-}
-
-input CrossingWhereUniqueInput {
-  coordinates: String
-}
-
 scalar DateTime
 
-type Geofence {
-  radius: Float
-  description: String
-  title: String
-  coordinates: String
-  status: String
-  type: String
-  points: Int
-  refreshRate: Float
-  owner: User
+type Equipment {
+  id: ID!
+  description: String!
+  type: EquipmentType!
+  owner: User!
 }
 
-type GeofenceConnection {
+type EquipmentConnection {
   pageInfo: PageInfo!
-  edges: [GeofenceEdge]!
-  aggregate: AggregateGeofence!
+  edges: [EquipmentEdge]!
+  aggregate: AggregateEquipment!
 }
 
-input GeofenceCreateInput {
-  radius: Float
-  description: String
-  title: String
-  coordinates: String
-  status: String
-  type: String
-  points: Int
-  refreshRate: Float
-  owner: UserCreateOneWithoutGeofencesInput
+input EquipmentCreateInput {
+  description: String!
+  type: EquipmentTypeCreateOneInput!
+  owner: UserCreateOneWithoutEquipmentInput!
 }
 
-input GeofenceCreateManyWithoutOwnerInput {
-  create: [GeofenceCreateWithoutOwnerInput!]
+input EquipmentCreateManyWithoutOwnerInput {
+  create: [EquipmentCreateWithoutOwnerInput!]
+  connect: [EquipmentWhereUniqueInput!]
 }
 
-input GeofenceCreateWithoutOwnerInput {
-  radius: Float
-  description: String
-  title: String
-  coordinates: String
-  status: String
-  type: String
-  points: Int
-  refreshRate: Float
+input EquipmentCreateOneInput {
+  create: EquipmentCreateInput
+  connect: EquipmentWhereUniqueInput
 }
 
-type GeofenceEdge {
-  node: Geofence!
+input EquipmentCreateWithoutOwnerInput {
+  description: String!
+  type: EquipmentTypeCreateOneInput!
+}
+
+type EquipmentEdge {
+  node: Equipment!
   cursor: String!
 }
 
-enum GeofenceOrderByInput {
-  radius_ASC
-  radius_DESC
-  description_ASC
-  description_DESC
-  title_ASC
-  title_DESC
-  coordinates_ASC
-  coordinates_DESC
-  status_ASC
-  status_DESC
-  type_ASC
-  type_DESC
-  points_ASC
-  points_DESC
-  refreshRate_ASC
-  refreshRate_DESC
+enum EquipmentOrderByInput {
   id_ASC
   id_DESC
+  description_ASC
+  description_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
 
-type GeofencePreviousValues {
-  radius: Float
-  description: String
-  title: String
-  coordinates: String
-  status: String
-  type: String
-  points: Int
-  refreshRate: Float
+type EquipmentPreviousValues {
+  id: ID!
+  description: String!
 }
 
-type GeofenceSubscriptionPayload {
+type EquipmentSubscriptionPayload {
   mutation: MutationType!
-  node: Geofence
+  node: Equipment
   updatedFields: [String!]
-  previousValues: GeofencePreviousValues
+  previousValues: EquipmentPreviousValues
 }
 
-input GeofenceSubscriptionWhereInput {
+input EquipmentSubscriptionWhereInput {
   mutation_in: [MutationType!]
   updatedFields_contains: String
   updatedFields_contains_every: [String!]
   updatedFields_contains_some: [String!]
-  node: GeofenceWhereInput
-  AND: [GeofenceSubscriptionWhereInput!]
-  OR: [GeofenceSubscriptionWhereInput!]
-  NOT: [GeofenceSubscriptionWhereInput!]
+  node: EquipmentWhereInput
+  AND: [EquipmentSubscriptionWhereInput!]
+  OR: [EquipmentSubscriptionWhereInput!]
+  NOT: [EquipmentSubscriptionWhereInput!]
 }
 
-input GeofenceUpdateManyMutationInput {
-  radius: Float
+type EquipmentType {
+  id: ID!
+  description: String!
+}
+
+type EquipmentTypeConnection {
+  pageInfo: PageInfo!
+  edges: [EquipmentTypeEdge]!
+  aggregate: AggregateEquipmentType!
+}
+
+input EquipmentTypeCreateInput {
+  description: String!
+}
+
+input EquipmentTypeCreateOneInput {
+  create: EquipmentTypeCreateInput
+  connect: EquipmentTypeWhereUniqueInput
+}
+
+type EquipmentTypeEdge {
+  node: EquipmentType!
+  cursor: String!
+}
+
+enum EquipmentTypeOrderByInput {
+  id_ASC
+  id_DESC
+  description_ASC
+  description_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type EquipmentTypePreviousValues {
+  id: ID!
+  description: String!
+}
+
+type EquipmentTypeSubscriptionPayload {
+  mutation: MutationType!
+  node: EquipmentType
+  updatedFields: [String!]
+  previousValues: EquipmentTypePreviousValues
+}
+
+input EquipmentTypeSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: EquipmentTypeWhereInput
+  AND: [EquipmentTypeSubscriptionWhereInput!]
+  OR: [EquipmentTypeSubscriptionWhereInput!]
+  NOT: [EquipmentTypeSubscriptionWhereInput!]
+}
+
+input EquipmentTypeUpdateDataInput {
   description: String
-  title: String
-  coordinates: String
-  status: String
-  type: String
-  points: Int
-  refreshRate: Float
 }
 
-input GeofenceUpdateManyWithoutOwnerInput {
-  create: [GeofenceCreateWithoutOwnerInput!]
+input EquipmentTypeUpdateInput {
+  description: String
 }
 
-input GeofenceWhereInput {
-  radius: Float
-  radius_not: Float
-  radius_in: [Float!]
-  radius_not_in: [Float!]
-  radius_lt: Float
-  radius_lte: Float
-  radius_gt: Float
-  radius_gte: Float
+input EquipmentTypeUpdateOneRequiredInput {
+  create: EquipmentTypeCreateInput
+  update: EquipmentTypeUpdateDataInput
+  upsert: EquipmentTypeUpsertNestedInput
+  connect: EquipmentTypeWhereUniqueInput
+}
+
+input EquipmentTypeUpsertNestedInput {
+  update: EquipmentTypeUpdateDataInput!
+  create: EquipmentTypeCreateInput!
+}
+
+input EquipmentTypeWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
   description: String
   description_not: String
   description_in: [String!]
@@ -345,105 +318,128 @@ input GeofenceWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
-  coordinates: String
-  coordinates_not: String
-  coordinates_in: [String!]
-  coordinates_not_in: [String!]
-  coordinates_lt: String
-  coordinates_lte: String
-  coordinates_gt: String
-  coordinates_gte: String
-  coordinates_contains: String
-  coordinates_not_contains: String
-  coordinates_starts_with: String
-  coordinates_not_starts_with: String
-  coordinates_ends_with: String
-  coordinates_not_ends_with: String
-  status: String
-  status_not: String
-  status_in: [String!]
-  status_not_in: [String!]
-  status_lt: String
-  status_lte: String
-  status_gt: String
-  status_gte: String
-  status_contains: String
-  status_not_contains: String
-  status_starts_with: String
-  status_not_starts_with: String
-  status_ends_with: String
-  status_not_ends_with: String
-  type: String
-  type_not: String
-  type_in: [String!]
-  type_not_in: [String!]
-  type_lt: String
-  type_lte: String
-  type_gt: String
-  type_gte: String
-  type_contains: String
-  type_not_contains: String
-  type_starts_with: String
-  type_not_starts_with: String
-  type_ends_with: String
-  type_not_ends_with: String
-  points: Int
-  points_not: Int
-  points_in: [Int!]
-  points_not_in: [Int!]
-  points_lt: Int
-  points_lte: Int
-  points_gt: Int
-  points_gte: Int
-  refreshRate: Float
-  refreshRate_not: Float
-  refreshRate_in: [Float!]
-  refreshRate_not_in: [Float!]
-  refreshRate_lt: Float
-  refreshRate_lte: Float
-  refreshRate_gt: Float
-  refreshRate_gte: Float
+  AND: [EquipmentTypeWhereInput!]
+  OR: [EquipmentTypeWhereInput!]
+  NOT: [EquipmentTypeWhereInput!]
+}
+
+input EquipmentTypeWhereUniqueInput {
+  id: ID
+}
+
+input EquipmentUpdateDataInput {
+  description: String
+  type: EquipmentTypeUpdateOneRequiredInput
+  owner: UserUpdateOneRequiredWithoutEquipmentInput
+}
+
+input EquipmentUpdateInput {
+  description: String
+  type: EquipmentTypeUpdateOneRequiredInput
+  owner: UserUpdateOneRequiredWithoutEquipmentInput
+}
+
+input EquipmentUpdateManyWithoutOwnerInput {
+  create: [EquipmentCreateWithoutOwnerInput!]
+  delete: [EquipmentWhereUniqueInput!]
+  connect: [EquipmentWhereUniqueInput!]
+  disconnect: [EquipmentWhereUniqueInput!]
+  update: [EquipmentUpdateWithWhereUniqueWithoutOwnerInput!]
+  upsert: [EquipmentUpsertWithWhereUniqueWithoutOwnerInput!]
+}
+
+input EquipmentUpdateOneRequiredInput {
+  create: EquipmentCreateInput
+  update: EquipmentUpdateDataInput
+  upsert: EquipmentUpsertNestedInput
+  connect: EquipmentWhereUniqueInput
+}
+
+input EquipmentUpdateWithoutOwnerDataInput {
+  description: String
+  type: EquipmentTypeUpdateOneRequiredInput
+}
+
+input EquipmentUpdateWithWhereUniqueWithoutOwnerInput {
+  where: EquipmentWhereUniqueInput!
+  data: EquipmentUpdateWithoutOwnerDataInput!
+}
+
+input EquipmentUpsertNestedInput {
+  update: EquipmentUpdateDataInput!
+  create: EquipmentCreateInput!
+}
+
+input EquipmentUpsertWithWhereUniqueWithoutOwnerInput {
+  where: EquipmentWhereUniqueInput!
+  update: EquipmentUpdateWithoutOwnerDataInput!
+  create: EquipmentCreateWithoutOwnerInput!
+}
+
+input EquipmentWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  type: EquipmentTypeWhereInput
   owner: UserWhereInput
-  AND: [GeofenceWhereInput!]
-  OR: [GeofenceWhereInput!]
-  NOT: [GeofenceWhereInput!]
+  AND: [EquipmentWhereInput!]
+  OR: [EquipmentWhereInput!]
+  NOT: [EquipmentWhereInput!]
+}
+
+input EquipmentWhereUniqueInput {
+  id: ID
 }
 
 scalar Long
 
 type Mutation {
-  createCrossing(data: CrossingCreateInput!): Crossing!
-  updateCrossing(data: CrossingUpdateInput!, where: CrossingWhereUniqueInput!): Crossing
-  updateManyCrossings(data: CrossingUpdateManyMutationInput!, where: CrossingWhereInput): BatchPayload!
-  upsertCrossing(where: CrossingWhereUniqueInput!, create: CrossingCreateInput!, update: CrossingUpdateInput!): Crossing!
-  deleteCrossing(where: CrossingWhereUniqueInput!): Crossing
-  deleteManyCrossings(where: CrossingWhereInput): BatchPayload!
-  createGeofence(data: GeofenceCreateInput!): Geofence!
-  updateManyGeofences(data: GeofenceUpdateManyMutationInput!, where: GeofenceWhereInput): BatchPayload!
-  deleteManyGeofences(where: GeofenceWhereInput): BatchPayload!
-  createRedemption(data: RedemptionCreateInput!): Redemption!
-  updateManyRedemptions(data: RedemptionUpdateManyMutationInput!, where: RedemptionWhereInput): BatchPayload!
-  deleteManyRedemptions(where: RedemptionWhereInput): BatchPayload!
-  createReward(data: RewardCreateInput!): Reward!
-  updateManyRewards(data: RewardUpdateManyMutationInput!, where: RewardWhereInput): BatchPayload!
-  deleteManyRewards(where: RewardWhereInput): BatchPayload!
+  createAvailability(data: AvailabilityCreateInput!): Availability!
+  updateAvailability(data: AvailabilityUpdateInput!, where: AvailabilityWhereUniqueInput!): Availability
+  updateManyAvailabilities(data: AvailabilityUpdateInput!, where: AvailabilityWhereInput): BatchPayload!
+  upsertAvailability(where: AvailabilityWhereUniqueInput!, create: AvailabilityCreateInput!, update: AvailabilityUpdateInput!): Availability!
+  deleteAvailability(where: AvailabilityWhereUniqueInput!): Availability
+  deleteManyAvailabilities(where: AvailabilityWhereInput): BatchPayload!
+  createEquipment(data: EquipmentCreateInput!): Equipment!
+  updateEquipment(data: EquipmentUpdateInput!, where: EquipmentWhereUniqueInput!): Equipment
+  updateManyEquipments(data: EquipmentUpdateInput!, where: EquipmentWhereInput): BatchPayload!
+  upsertEquipment(where: EquipmentWhereUniqueInput!, create: EquipmentCreateInput!, update: EquipmentUpdateInput!): Equipment!
+  deleteEquipment(where: EquipmentWhereUniqueInput!): Equipment
+  deleteManyEquipments(where: EquipmentWhereInput): BatchPayload!
+  createEquipmentType(data: EquipmentTypeCreateInput!): EquipmentType!
+  updateEquipmentType(data: EquipmentTypeUpdateInput!, where: EquipmentTypeWhereUniqueInput!): EquipmentType
+  updateManyEquipmentTypes(data: EquipmentTypeUpdateInput!, where: EquipmentTypeWhereInput): BatchPayload!
+  upsertEquipmentType(where: EquipmentTypeWhereUniqueInput!, create: EquipmentTypeCreateInput!, update: EquipmentTypeUpdateInput!): EquipmentType!
+  deleteEquipmentType(where: EquipmentTypeWhereUniqueInput!): EquipmentType
+  deleteManyEquipmentTypes(where: EquipmentTypeWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
@@ -467,274 +463,25 @@ type PageInfo {
 }
 
 type Query {
-  crossing(where: CrossingWhereUniqueInput!): Crossing
-  crossings(where: CrossingWhereInput, orderBy: CrossingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Crossing]!
-  crossingsConnection(where: CrossingWhereInput, orderBy: CrossingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CrossingConnection!
-  geofences(where: GeofenceWhereInput, orderBy: GeofenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Geofence]!
-  geofencesConnection(where: GeofenceWhereInput, orderBy: GeofenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GeofenceConnection!
-  redemptions(where: RedemptionWhereInput, orderBy: RedemptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Redemption]!
-  redemptionsConnection(where: RedemptionWhereInput, orderBy: RedemptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RedemptionConnection!
-  rewards(where: RewardWhereInput, orderBy: RewardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Reward]!
-  rewardsConnection(where: RewardWhereInput, orderBy: RewardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RewardConnection!
+  availability(where: AvailabilityWhereUniqueInput!): Availability
+  availabilities(where: AvailabilityWhereInput, orderBy: AvailabilityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Availability]!
+  availabilitiesConnection(where: AvailabilityWhereInput, orderBy: AvailabilityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AvailabilityConnection!
+  equipment(where: EquipmentWhereUniqueInput!): Equipment
+  equipments(where: EquipmentWhereInput, orderBy: EquipmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Equipment]!
+  equipmentsConnection(where: EquipmentWhereInput, orderBy: EquipmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EquipmentConnection!
+  equipmentType(where: EquipmentTypeWhereUniqueInput!): EquipmentType
+  equipmentTypes(where: EquipmentTypeWhereInput, orderBy: EquipmentTypeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [EquipmentType]!
+  equipmentTypesConnection(where: EquipmentTypeWhereInput, orderBy: EquipmentTypeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EquipmentTypeConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
 }
 
-type Redemption {
-  awardedAt: DateTime
-  points: Float
-  redeemer: User
-  reward: String
-}
-
-type RedemptionConnection {
-  pageInfo: PageInfo!
-  edges: [RedemptionEdge]!
-  aggregate: AggregateRedemption!
-}
-
-input RedemptionCreateInput {
-  awardedAt: DateTime
-  points: Float
-  redeemer: UserCreateOneWithoutRedemptionsInput
-  reward: String
-}
-
-input RedemptionCreateManyWithoutRedeemerInput {
-  create: [RedemptionCreateWithoutRedeemerInput!]
-}
-
-input RedemptionCreateWithoutRedeemerInput {
-  awardedAt: DateTime
-  points: Float
-  reward: String
-}
-
-type RedemptionEdge {
-  node: Redemption!
-  cursor: String!
-}
-
-enum RedemptionOrderByInput {
-  awardedAt_ASC
-  awardedAt_DESC
-  points_ASC
-  points_DESC
-  reward_ASC
-  reward_DESC
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type RedemptionPreviousValues {
-  awardedAt: DateTime
-  points: Float
-  reward: String
-}
-
-type RedemptionSubscriptionPayload {
-  mutation: MutationType!
-  node: Redemption
-  updatedFields: [String!]
-  previousValues: RedemptionPreviousValues
-}
-
-input RedemptionSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: RedemptionWhereInput
-  AND: [RedemptionSubscriptionWhereInput!]
-  OR: [RedemptionSubscriptionWhereInput!]
-  NOT: [RedemptionSubscriptionWhereInput!]
-}
-
-input RedemptionUpdateManyMutationInput {
-  awardedAt: DateTime
-  points: Float
-  reward: String
-}
-
-input RedemptionUpdateManyWithoutRedeemerInput {
-  create: [RedemptionCreateWithoutRedeemerInput!]
-}
-
-input RedemptionWhereInput {
-  awardedAt: DateTime
-  awardedAt_not: DateTime
-  awardedAt_in: [DateTime!]
-  awardedAt_not_in: [DateTime!]
-  awardedAt_lt: DateTime
-  awardedAt_lte: DateTime
-  awardedAt_gt: DateTime
-  awardedAt_gte: DateTime
-  points: Float
-  points_not: Float
-  points_in: [Float!]
-  points_not_in: [Float!]
-  points_lt: Float
-  points_lte: Float
-  points_gt: Float
-  points_gte: Float
-  redeemer: UserWhereInput
-  reward: String
-  reward_not: String
-  reward_in: [String!]
-  reward_not_in: [String!]
-  reward_lt: String
-  reward_lte: String
-  reward_gt: String
-  reward_gte: String
-  reward_contains: String
-  reward_not_contains: String
-  reward_starts_with: String
-  reward_not_starts_with: String
-  reward_ends_with: String
-  reward_not_ends_with: String
-  AND: [RedemptionWhereInput!]
-  OR: [RedemptionWhereInput!]
-  NOT: [RedemptionWhereInput!]
-}
-
-type Reward {
-  points: Float
-  title: String
-  text: String
-  grantor: User
-}
-
-type RewardConnection {
-  pageInfo: PageInfo!
-  edges: [RewardEdge]!
-  aggregate: AggregateReward!
-}
-
-input RewardCreateInput {
-  points: Float
-  title: String
-  text: String
-  grantor: UserCreateOneWithoutRewardsInput
-}
-
-input RewardCreateManyWithoutGrantorInput {
-  create: [RewardCreateWithoutGrantorInput!]
-}
-
-input RewardCreateWithoutGrantorInput {
-  points: Float
-  title: String
-  text: String
-}
-
-type RewardEdge {
-  node: Reward!
-  cursor: String!
-}
-
-enum RewardOrderByInput {
-  points_ASC
-  points_DESC
-  title_ASC
-  title_DESC
-  text_ASC
-  text_DESC
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type RewardPreviousValues {
-  points: Float
-  title: String
-  text: String
-}
-
-type RewardSubscriptionPayload {
-  mutation: MutationType!
-  node: Reward
-  updatedFields: [String!]
-  previousValues: RewardPreviousValues
-}
-
-input RewardSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: RewardWhereInput
-  AND: [RewardSubscriptionWhereInput!]
-  OR: [RewardSubscriptionWhereInput!]
-  NOT: [RewardSubscriptionWhereInput!]
-}
-
-input RewardUpdateManyMutationInput {
-  points: Float
-  title: String
-  text: String
-}
-
-input RewardUpdateManyWithoutGrantorInput {
-  create: [RewardCreateWithoutGrantorInput!]
-}
-
-input RewardWhereInput {
-  points: Float
-  points_not: Float
-  points_in: [Float!]
-  points_not_in: [Float!]
-  points_lt: Float
-  points_lte: Float
-  points_gt: Float
-  points_gte: Float
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
-  text: String
-  text_not: String
-  text_in: [String!]
-  text_not_in: [String!]
-  text_lt: String
-  text_lte: String
-  text_gt: String
-  text_gte: String
-  text_contains: String
-  text_not_contains: String
-  text_starts_with: String
-  text_not_starts_with: String
-  text_ends_with: String
-  text_not_ends_with: String
-  grantor: UserWhereInput
-  AND: [RewardWhereInput!]
-  OR: [RewardWhereInput!]
-  NOT: [RewardWhereInput!]
-}
-
 type Subscription {
-  crossing(where: CrossingSubscriptionWhereInput): CrossingSubscriptionPayload
-  geofence(where: GeofenceSubscriptionWhereInput): GeofenceSubscriptionPayload
-  redemption(where: RedemptionSubscriptionWhereInput): RedemptionSubscriptionPayload
-  reward(where: RewardSubscriptionWhereInput): RewardSubscriptionPayload
+  availability(where: AvailabilitySubscriptionWhereInput): AvailabilitySubscriptionPayload
+  equipment(where: EquipmentSubscriptionWhereInput): EquipmentSubscriptionPayload
+  equipmentType(where: EquipmentTypeSubscriptionWhereInput): EquipmentTypeSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -745,10 +492,7 @@ type User {
   firstName: String!
   lastName: String!
   role: UserRole!
-  redemptions(where: RedemptionWhereInput, orderBy: RedemptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Redemption!]
-  geofences(where: GeofenceWhereInput, orderBy: GeofenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Geofence!]
-  crossings(where: CrossingWhereInput, orderBy: CrossingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Crossing!]
-  rewards(where: RewardWhereInput, orderBy: RewardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Reward!]
+  equipment(where: EquipmentWhereInput, orderBy: EquipmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Equipment!]
 }
 
 type UserConnection {
@@ -763,74 +507,20 @@ input UserCreateInput {
   firstName: String!
   lastName: String!
   role: UserRole!
-  redemptions: RedemptionCreateManyWithoutRedeemerInput
-  geofences: GeofenceCreateManyWithoutOwnerInput
-  crossings: CrossingCreateManyWithoutCrosserInput
-  rewards: RewardCreateManyWithoutGrantorInput
+  equipment: EquipmentCreateManyWithoutOwnerInput
 }
 
-input UserCreateOneWithoutCrossingsInput {
-  create: UserCreateWithoutCrossingsInput
+input UserCreateOneWithoutEquipmentInput {
+  create: UserCreateWithoutEquipmentInput
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutGeofencesInput {
-  create: UserCreateWithoutGeofencesInput
-  connect: UserWhereUniqueInput
-}
-
-input UserCreateOneWithoutRedemptionsInput {
-  create: UserCreateWithoutRedemptionsInput
-  connect: UserWhereUniqueInput
-}
-
-input UserCreateOneWithoutRewardsInput {
-  create: UserCreateWithoutRewardsInput
-  connect: UserWhereUniqueInput
-}
-
-input UserCreateWithoutCrossingsInput {
+input UserCreateWithoutEquipmentInput {
   email: String!
   authId: String
   firstName: String!
   lastName: String!
   role: UserRole!
-  redemptions: RedemptionCreateManyWithoutRedeemerInput
-  geofences: GeofenceCreateManyWithoutOwnerInput
-  rewards: RewardCreateManyWithoutGrantorInput
-}
-
-input UserCreateWithoutGeofencesInput {
-  email: String!
-  authId: String
-  firstName: String!
-  lastName: String!
-  role: UserRole!
-  redemptions: RedemptionCreateManyWithoutRedeemerInput
-  crossings: CrossingCreateManyWithoutCrosserInput
-  rewards: RewardCreateManyWithoutGrantorInput
-}
-
-input UserCreateWithoutRedemptionsInput {
-  email: String!
-  authId: String
-  firstName: String!
-  lastName: String!
-  role: UserRole!
-  geofences: GeofenceCreateManyWithoutOwnerInput
-  crossings: CrossingCreateManyWithoutCrosserInput
-  rewards: RewardCreateManyWithoutGrantorInput
-}
-
-input UserCreateWithoutRewardsInput {
-  email: String!
-  authId: String
-  firstName: String!
-  lastName: String!
-  role: UserRole!
-  redemptions: RedemptionCreateManyWithoutRedeemerInput
-  geofences: GeofenceCreateManyWithoutOwnerInput
-  crossings: CrossingCreateManyWithoutCrosserInput
 }
 
 type UserEdge {
@@ -868,9 +558,7 @@ type UserPreviousValues {
 
 enum UserRole {
   ADMIN
-  MANAGER
   CLIENT
-  APP_USER
 }
 
 type UserSubscriptionPayload {
@@ -897,43 +585,27 @@ input UserUpdateInput {
   firstName: String
   lastName: String
   role: UserRole
-  redemptions: RedemptionUpdateManyWithoutRedeemerInput
-  geofences: GeofenceUpdateManyWithoutOwnerInput
-  crossings: CrossingUpdateManyWithoutCrosserInput
-  rewards: RewardUpdateManyWithoutGrantorInput
+  equipment: EquipmentUpdateManyWithoutOwnerInput
 }
 
-input UserUpdateManyMutationInput {
-  email: String
-  authId: String
-  firstName: String
-  lastName: String
-  role: UserRole
-}
-
-input UserUpdateOneWithoutCrossingsInput {
-  create: UserCreateWithoutCrossingsInput
-  update: UserUpdateWithoutCrossingsDataInput
-  upsert: UserUpsertWithoutCrossingsInput
-  delete: Boolean
-  disconnect: Boolean
+input UserUpdateOneRequiredWithoutEquipmentInput {
+  create: UserCreateWithoutEquipmentInput
+  update: UserUpdateWithoutEquipmentDataInput
+  upsert: UserUpsertWithoutEquipmentInput
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateWithoutCrossingsDataInput {
+input UserUpdateWithoutEquipmentDataInput {
   email: String
   authId: String
   firstName: String
   lastName: String
   role: UserRole
-  redemptions: RedemptionUpdateManyWithoutRedeemerInput
-  geofences: GeofenceUpdateManyWithoutOwnerInput
-  rewards: RewardUpdateManyWithoutGrantorInput
 }
 
-input UserUpsertWithoutCrossingsInput {
-  update: UserUpdateWithoutCrossingsDataInput!
-  create: UserCreateWithoutCrossingsInput!
+input UserUpsertWithoutEquipmentInput {
+  update: UserUpdateWithoutEquipmentDataInput!
+  create: UserCreateWithoutEquipmentInput!
 }
 
 input UserWhereInput {
@@ -1011,18 +683,9 @@ input UserWhereInput {
   role_not: UserRole
   role_in: [UserRole!]
   role_not_in: [UserRole!]
-  redemptions_every: RedemptionWhereInput
-  redemptions_some: RedemptionWhereInput
-  redemptions_none: RedemptionWhereInput
-  geofences_every: GeofenceWhereInput
-  geofences_some: GeofenceWhereInput
-  geofences_none: GeofenceWhereInput
-  crossings_every: CrossingWhereInput
-  crossings_some: CrossingWhereInput
-  crossings_none: CrossingWhereInput
-  rewards_every: RewardWhereInput
-  rewards_some: RewardWhereInput
-  rewards_none: RewardWhereInput
+  equipment_every: EquipmentWhereInput
+  equipment_some: EquipmentWhereInput
+  equipment_none: EquipmentWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

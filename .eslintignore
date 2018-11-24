@@ -1,6 +1,13 @@
-
 **/dist
 **/generated
 **/build
 **/node_modules
-**/serviceWorker.js
+**/.gitignore
+**/package.json
+**/yarn.lock
+**/.babelrc
+**/.eslintignore
+**/.eslintrc
+**/*.env
+client/**/serviceWorker.js
+server/**/Procfile

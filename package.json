@@ -4,7 +4,8 @@
   "author": "Pablo Rocha",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint --fix"
+    "lint-fix": "eslint --fix",
+    "lint-all": "eslint ."
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
@@ -13,6 +14,7 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-json": "^1.2.1",
     "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-markdown": "^1.0.0-rc.0",
     "eslint-plugin-react": "^7.11.1",
     "husky": "^1.1.4",
     "lint-staged": "^8.0.4"
@@ -24,7 +26,7 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,json,md}": [
-      "yarn lint",
+      "yarn lint-fix",
       "git add"
     ]
   },
@@ -33,8 +35,9 @@
     "prisma",
     "nodejs",
     "react",
-    "styled-components",
+    "react-native",
     "gatsbyjs",
+    "styled-components",
     "startup",
     "boilerplate"
   ]

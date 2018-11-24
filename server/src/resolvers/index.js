@@ -1,11 +1,9 @@
-import userQueries from './queries/user'
-import userMutations from './mutations/user'
+import Query from './Query'
+import Mutation from './Mutation'
 
-module.exports = {
-  Query: {
-    ...userQueries,
-  },
-  Mutation: {
-    ...userMutations,
-  },
+const resolvers = {
+  Query,
+  Mutation,
 }
+
+export default resolvers

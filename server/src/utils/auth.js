@@ -12,15 +12,15 @@ admin.initializeApp({
 const fbAuth = admin.auth()
 
 const getUser = async ({ headers, auth, db }) => {
+  // Validation
   const Authorization = headers.authorization ? headers.authorization : ''
-
   if (!Authorization) throw new AuthenticationError('Not authorized!')
+
+  // Determine the authentication ID
 
   const token = Authorization.replace('Bearer ', '')
 
   let authId
-
-  // Determine the authentication ID
 
   if (process.env.NODE_ENV === 'development' && process.env.AUTH_TEST_TOKEN === token) {
     // Easy testing when developing

@@ -1,8 +1,10 @@
 import { ApolloServer } from 'apollo-server'
 import { importSchema } from 'graphql-import'
+import { Prisma } from 'prisma-binding'
 import path from 'path'
 
 import { prisma } from './generated/prisma-client'
+import prismaSchema from './generated/prisma-client/prisma-schema'
 import resolvers from './resolvers'
 import directiveResolvers from './schema/directiveResolvers'
 import schemaDirectives from './schema/schemaDirectives'
@@ -10,10 +12,20 @@ import auth, { getUser } from './utils/auth'
 
 // Build application context
 
+const binding = new Prisma({
+  typeDefs: prismaSchema.typeDefs,
+  endpoint: process.env.PRISMA_URL,
+  secret: process.env.PRISMA_SECRET,
+  debug: true,
+})
+
 const context = async ({ req }) => {
   const params = {
     ...req,
-    db: prisma,
+    db: {
+      ...binding,
+      ...prisma, // this should be second
+    },
     auth,
   } // pass into getUser with ease
   return {

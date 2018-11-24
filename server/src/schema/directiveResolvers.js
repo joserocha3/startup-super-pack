@@ -1,14 +1,14 @@
-import { AuthenticationError } from 'apollo-server'
+import { AuthenticationError, AuthorizationError } from '../utils/errors'
 
-const isAuthenticated = async (next, source, { checkIfEmailIsVerified }, context) => {
-  if (!context.user || !context.user.emailAddress) throw new AuthenticationError('not-authorized')
-  if (checkIfEmailIsVerified && !context.user.emailVerified) throw new Error('email-unverified')
+const isAuthenticated = async (next, source, { checkIfEmailIsVerified }, { user }) => {
+  if (!user || !user.emailAddress) throw new AuthenticationError('Not authenticated')
+  if (checkIfEmailIsVerified && !user.emailVerified) throw new Error('Email not verified')
   return next()
 }
 
-const hasRole = async (next, source, { roles }, context) => {
-  if (roles.includes(context.user.role)) return next()
-  throw new AuthenticationError('not-authorized')
+const hasRole = async (next, source, { roles }, { user }) => {
+  if (!roles.includes(user.role)) throw new AuthorizationError('Not authorized')
+  return next()
 }
 
 export { isAuthenticated, hasRole }
