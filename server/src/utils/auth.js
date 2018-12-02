@@ -44,4 +44,16 @@ const getUser = async ({ headers, auth, db }) => {
   }
 }
 
-export { fbAuth as default, getUser }
+const getFirebaseUser = async (email) => {
+  try {
+    return await fbAuth.getUserByEmail(email)
+  } catch (error) {
+    return null
+  }
+}
+
+export {
+  fbAuth as default,
+  getUser,
+  getFirebaseUser,
+}

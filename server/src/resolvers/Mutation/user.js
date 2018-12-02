@@ -1,6 +1,7 @@
 import * as yup from 'yup'
 
 import { ValidationError, GenericError } from '../../utils/errors'
+import { getFirebaseUser } from '../../utils/auth'
 
 const userSchema = {
   email: yup.string().required('Email address is required').email('Email address is incorrectly formatted'),
@@ -23,8 +24,8 @@ const defaultRole = 'USER'
 const signUp = async (root, { data }, { db, auth }) => {
   // Validate
   await signUpSchema.validate(data)
-  const exists = await db.users({ where: { email: data.email } })
-  if (exists && exists.length > 0) throw new ValidationError('Email address is already in use')
+  const exists = await getFirebaseUser(data.email) || await db.$exists.user({ email: data.email })
+  if (exists) throw new ValidationError('Email address is already in use')
 
   // Create in database
   const user = await db.createUser({ ...data, role: defaultRole })
@@ -46,7 +47,7 @@ const signUp = async (root, { data }, { db, auth }) => {
 const createUser = async (root, { data }, { db, auth }) => {
   // Validate
   await createUserSchema.validate(data)
-  const exists = await auth.getUserByEmail(data.email) || await db.$exists.user({ email: data.email })
+  const exists = await getFirebaseUser(data.email) || await db.$exists.user({ email: data.email })
   if (exists) throw new ValidationError('Email address is already in use')
 
   // Create in database
