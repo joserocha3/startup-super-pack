@@ -36,17 +36,19 @@ In the Heroku dashboard you can create an app, then under the deploy section lin
 
 List of commands found in `package.json`. Most of the actions you need to perform via the command line will be available via these commands. These all assume you are in the project root.
 
-`yarn start` - start development server locally and watch for changes
+`yarn dev` - start development server locally and watch for changes
 
-`yarn postinstall` - instructions for Heroku, this does not need to be manually executed
+`yarn start` - run contents of `dist` directory
 
 `yarn build` - output into `dist` directory for production
 
-`yarn serve` - run contents of `dist` directory
+`yarn heroku-postbuild` - instructions for Heroku, this does not need to be manually executed
 
 `yarn prisma-generate` - output into `src/generated` directory based on `database` directory contents
 
 `yarn prisma-deploy` - tells Prisma to take the contents of 'database/datamodel.prisma` and apply them to the database
+
+`yarn lint` - instructions for `husky`/`lint-staged`, this does not need to be manually executed
 
 ## Project Structure
 
