@@ -5,19 +5,13 @@ directive @isAuthenticated(checkIfEmailIsVerified: Boolean = false) on FIELD | F
 directive @hasRole(roles: [String]) on FIELD | FIELD_DEFINITION
 directive @date(format: String) on FIELD_DEFINITION
 
-scalar Date
+scalar DateTime
 
-"""
-This value controls user authorization to execute specific actions.
-"""
 enum Role {
   ADMIN
   CLIENT
 }
 
-"""
-A user of this software. This user can login under an assigned role.
-"""
 type User {
   id: ID!
   email: String!
@@ -27,17 +21,12 @@ type User {
   equipment: [Equipment!]
 }
 
-"""
-Types of equipment used for filtering and other classification reasons.
-"""
 type EquipmentType {
   id: ID!
   description: String!
+  equipments: [Equipment!]
 }
 
-"""
-Equipment belonging to a specific user.
-"""
 type Equipment {
   id: ID!
   description: String!
@@ -45,41 +34,34 @@ type Equipment {
   owner: User!
 }
 
-"""
-Time and dates certain equipment is available.
-"""
 type Availability {
   id: ID!
   equipment: Equipment!
-  start: Date!
-  end: Date!
+  start: DateTime!
+  end: DateTime!
   booked: Boolean
 }
 
 type Query {
-  """
-  Returns a single user's information.
-  """
   me: User @isAuthenticated
-  """
-  Returns a list of all users.
-  """
-  users: [User!]! @hasRole(roles:["test"])
-  """
-  Returns a list of availabilities.
-  """
-  availabilities: [Availability!]!
-  """
-  Returns a list of equipments.
-  """
-  equipments: [Equipment!]!
-  """
-  Returns a list of equipment types.
-  """
-  equipmentTypes: [EquipmentType!]!
+  users: [User!] @hasRole(roles:["ADMIN"])
+  user(id: ID!): User! @hasRole(roles:["ADMIN"])
+  equipmentTypes: [EquipmentType!]
+  equipmentType(id: ID!): EquipmentType!
+  equipments: [Equipment!]
+  equipment(id: ID!): Equipment!
+  availabilities: [Availability!]
+  availability(id: ID!): Availability!
 }
 
-input createUserInput {
+input SignUpInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+}
+
+input CreateUserInput {
   email: String!
   password: String!
   firstName: String!
@@ -87,50 +69,55 @@ input createUserInput {
   role: Role!
 }
 
-input signUpInput {
-  email: String!
-  password: String!
-  firstName: String!
-  lastName: String!
+input UpdateUserInput {
+  email: String
+  password: String
+  firstName: String
+  lastName: String
+  role: Role
 }
 
-input createEquipmentTypeInput {
+input CreateEquipmentTypeInput {
   description: String!
 }
 
-input createEquipmentInput {
+input UpdateEquipmentTypeInput {
+  description: String
+}
+
+input CreateEquipmentInput {
   description: String!
   type: ID!
-  owner: ID
+  owner: ID!
 }
 
-input createAvailabilityInput {
+input UpdateEquipmentInput {
+  description: String
+  type: ID
+}
+
+input CreateAvailabilityInput {
   equipment: ID!
-  start: Date!
-  end: Date!
+  start: DateTime!
+  end: DateTime!
   booked: Boolean
-  owner: ID
+  owner: ID!
+}
+
+input UpdateAvailabilityInput {
+  start: DateTime
+  end: DateTime
+  booked: Boolean
 }
 
 type Mutation {
-  """
-  Create a single user. Can assign any role.
-  """
-  createUser(data: createUserInput!): User @hasRole(roles:["ADMIN"])
-  """
-  User creates their own record. This is public, so CLIENT role is applied.
-  """
-  signUp(data: signUpInput!): User
-  """
-  Create an equipment type. Only ADMIN users can do this.
-  """
-  createEquipmentType(data: createEquipmentTypeInput!): EquipmentType @hasRole(roles:["ADMIN"])
-  """
-  Create an equimpent record for a specified user, else for the signed in user.
-  """
-  createEquipment(data: createEquipmentInput!): Equipment @isAuthenticated
-  """
-  Specify a time and date range that represents when a piece of equipment is available.
-  """
-  createAvailability(data: createAvailabilityInput!): Availability @isAuthenticated
+  signUp(data: SignUpInput!): User!
+  createUser(data: CreateUserInput!): User @hasRole(roles:["ADMIN"])
+  updateUser(id: ID!, data: UpdateUserInput): User @isAuthenticated
+  createEquipmentType(data: CreateEquipmentTypeInput!): EquipmentType @hasRole(roles:["ADMIN"])
+  updateEquipmentType(id: ID!, data: UpdateEquipmentTypeInput): EquipmentType @hasRole(roles:["ADMIN"])
+  createEquipment(data: CreateEquipmentInput!): Equipment @isAuthenticated
+  updateEquipment(id: ID!, data: UpdateEquipmentInput): Equipment @isAuthenticated
+  createAvailability(data: CreateAvailabilityInput!): Availability @isAuthenticated
+  updateAvailability(id: ID!, data: UpdateAvailabilityInput): Availability @isAuthenticated
 }

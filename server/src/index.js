@@ -1,3 +1,4 @@
+import '@babel/polyfill/noConflict'
 import { ApolloServer } from 'apollo-server'
 import { importSchema } from 'graphql-import'
 import { Prisma } from 'prisma-binding'
@@ -14,9 +15,9 @@ import auth, { getUser } from './utils/auth'
 
 const binding = new Prisma({
   typeDefs: prismaSchema.typeDefs,
-  endpoint: process.env.PRISMA_URL,
+  endpoint: process.env.PRISMA_ENDPOINT,
   secret: process.env.PRISMA_SECRET,
-  debug: true,
+  debug: process.env.PRISMA_DEBUG === 'true',
 })
 
 const context = async ({ req }) => {

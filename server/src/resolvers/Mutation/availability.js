@@ -8,12 +8,12 @@ const createAvailabilitySchema = yup.object().shape({
   owner: yup.string(),
 })
 
-const createAvailability = async (root, { data }, { db }) => {
+const createAvailability = async (root, { data }, { db }, info) => {
   // Validate
   await createAvailabilitySchema.validate(data)
 
   // Create in database
-  return db.createAvailability({
+  return db.mutation.createAvailability({
     equipment: {
       connect: {
         id: data.equipment,
@@ -26,11 +26,17 @@ const createAvailability = async (root, { data }, { db }) => {
         id: data.owner,
       },
     },
-  })
+  }, info)
 }
+
+const updateAvailability = async (root, { id, data }, { db }, info) => db.mutation.updateAvailability({
+  where: { id },
+  data,
+}, info)
 
 const mutations = {
   createAvailability,
+  updateAvailability,
 }
 
 export default mutations

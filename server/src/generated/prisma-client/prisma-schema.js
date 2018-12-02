@@ -30,7 +30,18 @@ type AvailabilityConnection {
 }
 
 input AvailabilityCreateInput {
-  equipment: EquipmentCreateOneInput!
+  equipment: EquipmentCreateOneWithoutAvailabilitiesInput!
+  start: DateTime!
+  end: DateTime!
+  booked: Boolean
+}
+
+input AvailabilityCreateManyWithoutEquipmentInput {
+  create: [AvailabilityCreateWithoutEquipmentInput!]
+  connect: [AvailabilityWhereUniqueInput!]
+}
+
+input AvailabilityCreateWithoutEquipmentInput {
   start: DateTime!
   end: DateTime!
   booked: Boolean
@@ -82,10 +93,42 @@ input AvailabilitySubscriptionWhereInput {
 }
 
 input AvailabilityUpdateInput {
-  equipment: EquipmentUpdateOneRequiredInput
+  equipment: EquipmentUpdateOneRequiredWithoutAvailabilitiesInput
   start: DateTime
   end: DateTime
   booked: Boolean
+}
+
+input AvailabilityUpdateManyMutationInput {
+  start: DateTime
+  end: DateTime
+  booked: Boolean
+}
+
+input AvailabilityUpdateManyWithoutEquipmentInput {
+  create: [AvailabilityCreateWithoutEquipmentInput!]
+  delete: [AvailabilityWhereUniqueInput!]
+  connect: [AvailabilityWhereUniqueInput!]
+  disconnect: [AvailabilityWhereUniqueInput!]
+  update: [AvailabilityUpdateWithWhereUniqueWithoutEquipmentInput!]
+  upsert: [AvailabilityUpsertWithWhereUniqueWithoutEquipmentInput!]
+}
+
+input AvailabilityUpdateWithoutEquipmentDataInput {
+  start: DateTime
+  end: DateTime
+  booked: Boolean
+}
+
+input AvailabilityUpdateWithWhereUniqueWithoutEquipmentInput {
+  where: AvailabilityWhereUniqueInput!
+  data: AvailabilityUpdateWithoutEquipmentDataInput!
+}
+
+input AvailabilityUpsertWithWhereUniqueWithoutEquipmentInput {
+  where: AvailabilityWhereUniqueInput!
+  update: AvailabilityUpdateWithoutEquipmentDataInput!
+  create: AvailabilityCreateWithoutEquipmentInput!
 }
 
 input AvailabilityWhereInput {
@@ -142,6 +185,7 @@ type Equipment {
   description: String!
   type: EquipmentType!
   owner: User!
+  availabilities(where: AvailabilityWhereInput, orderBy: AvailabilityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Availability!]
 }
 
 type EquipmentConnection {
@@ -152,23 +196,31 @@ type EquipmentConnection {
 
 input EquipmentCreateInput {
   description: String!
-  type: EquipmentTypeCreateOneInput!
-  owner: UserCreateOneWithoutEquipmentInput!
+  type: EquipmentTypeCreateOneWithoutEquipmentsInput!
+  owner: UserCreateOneInput!
+  availabilities: AvailabilityCreateManyWithoutEquipmentInput
 }
 
-input EquipmentCreateManyWithoutOwnerInput {
-  create: [EquipmentCreateWithoutOwnerInput!]
+input EquipmentCreateManyWithoutTypeInput {
+  create: [EquipmentCreateWithoutTypeInput!]
   connect: [EquipmentWhereUniqueInput!]
 }
 
-input EquipmentCreateOneInput {
-  create: EquipmentCreateInput
+input EquipmentCreateOneWithoutAvailabilitiesInput {
+  create: EquipmentCreateWithoutAvailabilitiesInput
   connect: EquipmentWhereUniqueInput
 }
 
-input EquipmentCreateWithoutOwnerInput {
+input EquipmentCreateWithoutAvailabilitiesInput {
   description: String!
-  type: EquipmentTypeCreateOneInput!
+  type: EquipmentTypeCreateOneWithoutEquipmentsInput!
+  owner: UserCreateOneInput!
+}
+
+input EquipmentCreateWithoutTypeInput {
+  description: String!
+  owner: UserCreateOneInput!
+  availabilities: AvailabilityCreateManyWithoutEquipmentInput
 }
 
 type EquipmentEdge {
@@ -213,6 +265,7 @@ input EquipmentSubscriptionWhereInput {
 type EquipmentType {
   id: ID!
   description: String!
+  equipments(where: EquipmentWhereInput, orderBy: EquipmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Equipment!]
 }
 
 type EquipmentTypeConnection {
@@ -223,11 +276,16 @@ type EquipmentTypeConnection {
 
 input EquipmentTypeCreateInput {
   description: String!
+  equipments: EquipmentCreateManyWithoutTypeInput
 }
 
-input EquipmentTypeCreateOneInput {
-  create: EquipmentTypeCreateInput
+input EquipmentTypeCreateOneWithoutEquipmentsInput {
+  create: EquipmentTypeCreateWithoutEquipmentsInput
   connect: EquipmentTypeWhereUniqueInput
+}
+
+input EquipmentTypeCreateWithoutEquipmentsInput {
+  description: String!
 }
 
 type EquipmentTypeEdge {
@@ -269,24 +327,29 @@ input EquipmentTypeSubscriptionWhereInput {
   NOT: [EquipmentTypeSubscriptionWhereInput!]
 }
 
-input EquipmentTypeUpdateDataInput {
-  description: String
-}
-
 input EquipmentTypeUpdateInput {
   description: String
+  equipments: EquipmentUpdateManyWithoutTypeInput
 }
 
-input EquipmentTypeUpdateOneRequiredInput {
-  create: EquipmentTypeCreateInput
-  update: EquipmentTypeUpdateDataInput
-  upsert: EquipmentTypeUpsertNestedInput
+input EquipmentTypeUpdateManyMutationInput {
+  description: String
+}
+
+input EquipmentTypeUpdateOneRequiredWithoutEquipmentsInput {
+  create: EquipmentTypeCreateWithoutEquipmentsInput
+  update: EquipmentTypeUpdateWithoutEquipmentsDataInput
+  upsert: EquipmentTypeUpsertWithoutEquipmentsInput
   connect: EquipmentTypeWhereUniqueInput
 }
 
-input EquipmentTypeUpsertNestedInput {
-  update: EquipmentTypeUpdateDataInput!
-  create: EquipmentTypeCreateInput!
+input EquipmentTypeUpdateWithoutEquipmentsDataInput {
+  description: String
+}
+
+input EquipmentTypeUpsertWithoutEquipmentsInput {
+  update: EquipmentTypeUpdateWithoutEquipmentsDataInput!
+  create: EquipmentTypeCreateWithoutEquipmentsInput!
 }
 
 input EquipmentTypeWhereInput {
@@ -318,6 +381,9 @@ input EquipmentTypeWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
+  equipments_every: EquipmentWhereInput
+  equipments_some: EquipmentWhereInput
+  equipments_none: EquipmentWhereInput
   AND: [EquipmentTypeWhereInput!]
   OR: [EquipmentTypeWhereInput!]
   NOT: [EquipmentTypeWhereInput!]
@@ -327,53 +393,59 @@ input EquipmentTypeWhereUniqueInput {
   id: ID
 }
 
-input EquipmentUpdateDataInput {
-  description: String
-  type: EquipmentTypeUpdateOneRequiredInput
-  owner: UserUpdateOneRequiredWithoutEquipmentInput
-}
-
 input EquipmentUpdateInput {
   description: String
-  type: EquipmentTypeUpdateOneRequiredInput
-  owner: UserUpdateOneRequiredWithoutEquipmentInput
+  type: EquipmentTypeUpdateOneRequiredWithoutEquipmentsInput
+  owner: UserUpdateOneRequiredInput
+  availabilities: AvailabilityUpdateManyWithoutEquipmentInput
 }
 
-input EquipmentUpdateManyWithoutOwnerInput {
-  create: [EquipmentCreateWithoutOwnerInput!]
+input EquipmentUpdateManyMutationInput {
+  description: String
+}
+
+input EquipmentUpdateManyWithoutTypeInput {
+  create: [EquipmentCreateWithoutTypeInput!]
   delete: [EquipmentWhereUniqueInput!]
   connect: [EquipmentWhereUniqueInput!]
   disconnect: [EquipmentWhereUniqueInput!]
-  update: [EquipmentUpdateWithWhereUniqueWithoutOwnerInput!]
-  upsert: [EquipmentUpsertWithWhereUniqueWithoutOwnerInput!]
+  update: [EquipmentUpdateWithWhereUniqueWithoutTypeInput!]
+  upsert: [EquipmentUpsertWithWhereUniqueWithoutTypeInput!]
 }
 
-input EquipmentUpdateOneRequiredInput {
-  create: EquipmentCreateInput
-  update: EquipmentUpdateDataInput
-  upsert: EquipmentUpsertNestedInput
+input EquipmentUpdateOneRequiredWithoutAvailabilitiesInput {
+  create: EquipmentCreateWithoutAvailabilitiesInput
+  update: EquipmentUpdateWithoutAvailabilitiesDataInput
+  upsert: EquipmentUpsertWithoutAvailabilitiesInput
   connect: EquipmentWhereUniqueInput
 }
 
-input EquipmentUpdateWithoutOwnerDataInput {
+input EquipmentUpdateWithoutAvailabilitiesDataInput {
   description: String
-  type: EquipmentTypeUpdateOneRequiredInput
+  type: EquipmentTypeUpdateOneRequiredWithoutEquipmentsInput
+  owner: UserUpdateOneRequiredInput
 }
 
-input EquipmentUpdateWithWhereUniqueWithoutOwnerInput {
+input EquipmentUpdateWithoutTypeDataInput {
+  description: String
+  owner: UserUpdateOneRequiredInput
+  availabilities: AvailabilityUpdateManyWithoutEquipmentInput
+}
+
+input EquipmentUpdateWithWhereUniqueWithoutTypeInput {
   where: EquipmentWhereUniqueInput!
-  data: EquipmentUpdateWithoutOwnerDataInput!
+  data: EquipmentUpdateWithoutTypeDataInput!
 }
 
-input EquipmentUpsertNestedInput {
-  update: EquipmentUpdateDataInput!
-  create: EquipmentCreateInput!
+input EquipmentUpsertWithoutAvailabilitiesInput {
+  update: EquipmentUpdateWithoutAvailabilitiesDataInput!
+  create: EquipmentCreateWithoutAvailabilitiesInput!
 }
 
-input EquipmentUpsertWithWhereUniqueWithoutOwnerInput {
+input EquipmentUpsertWithWhereUniqueWithoutTypeInput {
   where: EquipmentWhereUniqueInput!
-  update: EquipmentUpdateWithoutOwnerDataInput!
-  create: EquipmentCreateWithoutOwnerInput!
+  update: EquipmentUpdateWithoutTypeDataInput!
+  create: EquipmentCreateWithoutTypeInput!
 }
 
 input EquipmentWhereInput {
@@ -407,6 +479,9 @@ input EquipmentWhereInput {
   description_not_ends_with: String
   type: EquipmentTypeWhereInput
   owner: UserWhereInput
+  availabilities_every: AvailabilityWhereInput
+  availabilities_some: AvailabilityWhereInput
+  availabilities_none: AvailabilityWhereInput
   AND: [EquipmentWhereInput!]
   OR: [EquipmentWhereInput!]
   NOT: [EquipmentWhereInput!]
@@ -421,25 +496,25 @@ scalar Long
 type Mutation {
   createAvailability(data: AvailabilityCreateInput!): Availability!
   updateAvailability(data: AvailabilityUpdateInput!, where: AvailabilityWhereUniqueInput!): Availability
-  updateManyAvailabilities(data: AvailabilityUpdateInput!, where: AvailabilityWhereInput): BatchPayload!
+  updateManyAvailabilities(data: AvailabilityUpdateManyMutationInput!, where: AvailabilityWhereInput): BatchPayload!
   upsertAvailability(where: AvailabilityWhereUniqueInput!, create: AvailabilityCreateInput!, update: AvailabilityUpdateInput!): Availability!
   deleteAvailability(where: AvailabilityWhereUniqueInput!): Availability
   deleteManyAvailabilities(where: AvailabilityWhereInput): BatchPayload!
   createEquipment(data: EquipmentCreateInput!): Equipment!
   updateEquipment(data: EquipmentUpdateInput!, where: EquipmentWhereUniqueInput!): Equipment
-  updateManyEquipments(data: EquipmentUpdateInput!, where: EquipmentWhereInput): BatchPayload!
+  updateManyEquipments(data: EquipmentUpdateManyMutationInput!, where: EquipmentWhereInput): BatchPayload!
   upsertEquipment(where: EquipmentWhereUniqueInput!, create: EquipmentCreateInput!, update: EquipmentUpdateInput!): Equipment!
   deleteEquipment(where: EquipmentWhereUniqueInput!): Equipment
   deleteManyEquipments(where: EquipmentWhereInput): BatchPayload!
   createEquipmentType(data: EquipmentTypeCreateInput!): EquipmentType!
   updateEquipmentType(data: EquipmentTypeUpdateInput!, where: EquipmentTypeWhereUniqueInput!): EquipmentType
-  updateManyEquipmentTypes(data: EquipmentTypeUpdateInput!, where: EquipmentTypeWhereInput): BatchPayload!
+  updateManyEquipmentTypes(data: EquipmentTypeUpdateManyMutationInput!, where: EquipmentTypeWhereInput): BatchPayload!
   upsertEquipmentType(where: EquipmentTypeWhereUniqueInput!, create: EquipmentTypeCreateInput!, update: EquipmentTypeUpdateInput!): EquipmentType!
   deleteEquipmentType(where: EquipmentTypeWhereUniqueInput!): EquipmentType
   deleteManyEquipmentTypes(where: EquipmentTypeWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
@@ -492,7 +567,6 @@ type User {
   firstName: String!
   lastName: String!
   role: UserRole!
-  equipment(where: EquipmentWhereInput, orderBy: EquipmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Equipment!]
 }
 
 type UserConnection {
@@ -507,20 +581,11 @@ input UserCreateInput {
   firstName: String!
   lastName: String!
   role: UserRole!
-  equipment: EquipmentCreateManyWithoutOwnerInput
 }
 
-input UserCreateOneWithoutEquipmentInput {
-  create: UserCreateWithoutEquipmentInput
+input UserCreateOneInput {
+  create: UserCreateInput
   connect: UserWhereUniqueInput
-}
-
-input UserCreateWithoutEquipmentInput {
-  email: String!
-  authId: String
-  firstName: String!
-  lastName: String!
-  role: UserRole!
 }
 
 type UserEdge {
@@ -579,23 +644,23 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
+input UserUpdateDataInput {
+  email: String
+  authId: String
+  firstName: String
+  lastName: String
+  role: UserRole
+}
+
 input UserUpdateInput {
   email: String
   authId: String
   firstName: String
   lastName: String
   role: UserRole
-  equipment: EquipmentUpdateManyWithoutOwnerInput
 }
 
-input UserUpdateOneRequiredWithoutEquipmentInput {
-  create: UserCreateWithoutEquipmentInput
-  update: UserUpdateWithoutEquipmentDataInput
-  upsert: UserUpsertWithoutEquipmentInput
-  connect: UserWhereUniqueInput
-}
-
-input UserUpdateWithoutEquipmentDataInput {
+input UserUpdateManyMutationInput {
   email: String
   authId: String
   firstName: String
@@ -603,9 +668,16 @@ input UserUpdateWithoutEquipmentDataInput {
   role: UserRole
 }
 
-input UserUpsertWithoutEquipmentInput {
-  update: UserUpdateWithoutEquipmentDataInput!
-  create: UserCreateWithoutEquipmentInput!
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserWhereInput {
@@ -683,9 +755,6 @@ input UserWhereInput {
   role_not: UserRole
   role_in: [UserRole!]
   role_not_in: [UserRole!]
-  equipment_every: EquipmentWhereInput
-  equipment_some: EquipmentWhereInput
-  equipment_none: EquipmentWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

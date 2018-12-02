@@ -13,10 +13,17 @@
         "json"
     ],
     "rules": {
+        "react/prop-types": "off",
         "react/jsx-filename-extension": "off",
         "semi": [
             "error",
             "never"
+        ],
+        "max-len": [
+            "error",
+            {
+                "code": 180
+            }
         ]
     }
 }

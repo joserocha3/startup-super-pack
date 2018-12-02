@@ -9,13 +9,21 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@firebase/app": "^0.3.5",
+    "@firebase/auth": "^0.8.0",
     "@nomoreanalog/react-scripts-eslintless": "^2.1.5",
+    "@reach/router": "^1.2.1",
     "apollo-boost": "^0.1.20",
+    "apollo-client-preset": "^1.0.8",
+    "apollo-link-context": "^1.0.10",
+    "apollo-link-http": "^1.5.7",
     "graphql": "^14.0.2",
+    "lodash.get": "^4.4.2",
     "react": "^16.6.3",
     "react-apollo": "^2.2.4",
     "react-dom": "^16.6.3",
-    "styled-components": "^4.1.1"
+    "styled-components": "^4.1.1",
+    "styled-normalize": "^8.0.4"
   },
   "devDependencies": {
     "babel-plugin-styled-components": "^1.8.0"

@@ -7,14 +7,15 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "start": "nodemon -r node_modules/dotenv/config src/index.js --ext js,graphql --exec babel-node",
-    "postinstall": "yarn build",
-    "build": "rimraf dist && babel src -d dist --copy-files && babel src -d dist --ignore 'src/generated','src/schema.graphql'",
-    "serve": "node dist/index.js",
+    "dev": "nodemon -r node_modules/dotenv/config src/index.js --ext js,graphql --exec babel-node",
+    "start": "node dist/index.js",
+    "build": "rimraf dist && babel src --out-dir dist --copy-files",
+    "heroku-postbuild": "yarn build",
     "prisma-generate": "cd database && prisma generate --env-file ../.env && cd ..",
     "prisma-deploy": "cd database && prisma deploy --env-file ../.env && cd .."
   },
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "apollo-server": "^2.2.2",
     "dateformat": "^3.0.3",
     "dotenv": "^6.1.0",
@@ -22,6 +23,7 @@
     "graphql": "^14.0.2",
     "graphql-import": "^0.7.1",
     "graphql-tools": "^4.0.3",
+    "moment": "^2.22.2",
     "prisma-binding": "^2.2.8",
     "prisma-client-lib": "^1.21.0",
     "yup": "^0.26.6"

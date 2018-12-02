@@ -1,5 +1,5 @@
 datamodel: datamodel.prisma
-endpoint: ${env:PRISMA_URL}
+endpoint: ${env:PRISMA_ENDPOINT}
 secret: ${env:PRISMA_SECRET}
 
 generate:

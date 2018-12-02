@@ -10,12 +10,12 @@ type User {
   firstName: String!
   lastName: String!
   role: UserRole!  
-  equipment: [Equipment!]!
 }
 
 type EquipmentType {
   id: ID! @unique
   description: String!
+  equipments: [Equipment!]!
 }
 
 type Equipment {
@@ -23,6 +23,7 @@ type Equipment {
   description: String!
   type: EquipmentType!
   owner: User!
+  availabilities: [Availability!]!
 }
 
 type Availability {
