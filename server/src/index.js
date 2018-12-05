@@ -1,4 +1,3 @@
-import '@babel/polyfill/noConflict'
 import { ApolloServer } from 'apollo-server'
 import { importSchema } from 'graphql-import'
 import { Prisma } from 'prisma-binding'
@@ -7,7 +6,6 @@ import path from 'path'
 import { prisma } from './generated/prisma-client'
 import prismaSchema from './generated/prisma-client/prisma-schema'
 import resolvers from './resolvers'
-import directiveResolvers from './schema/directiveResolvers'
 import schemaDirectives from './schema/schemaDirectives'
 import auth, { getUser } from './utils/auth'
 
@@ -42,7 +40,6 @@ const typeDefs = importSchema(path.resolve('src/schema/schema.graphql'))
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  directiveResolvers,
   schemaDirectives,
   context,
 })

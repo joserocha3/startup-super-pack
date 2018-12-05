@@ -7,18 +7,17 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "dev": "nodemon -r node_modules/dotenv/config src/index.js --ext js,graphql --exec babel-node",
-    "start": "node dist/index.js",
-    "build": "rimraf dist && babel src --out-dir dist --copy-files",
+    "dev": "backpack -r dotenv/config",
+    "start": "node build/main.js",
+    "build": "backpack build",
     "heroku-postbuild": "yarn build",
     "prisma-generate": "cd database && prisma generate --env-file ../.env && cd ..",
     "prisma-deploy": "cd database && prisma deploy --env-file ../.env && cd .."
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0",
     "apollo-server": "^2.2.2",
+    "backpack-core": "^0.8.3",
     "dateformat": "^3.0.3",
-    "dotenv": "^6.1.0",
     "firebase-admin": "^6.2.0",
     "graphql": "^14.0.2",
     "graphql-import": "^0.7.1",
@@ -29,13 +28,7 @@
     "yup": "^0.26.6"
   },
   "devDependencies": {
-    "@babel/cli": "^7.1.5",
-    "@babel/core": "^7.1.6",
-    "@babel/node": "^7.0.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/preset-env": "^7.1.6",
-    "nodemon": "^1.18.6",
-    "rimraf": "^2.6.2"
+    "dotenv": "^6.1.0"
   },
   "keywords": [
     "graphQL",
