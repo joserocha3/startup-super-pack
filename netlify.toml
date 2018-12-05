@@ -1,4 +1,0 @@
-[build]
-  base    = "client"
-  publish = "build"
-  command = "yarn build"
