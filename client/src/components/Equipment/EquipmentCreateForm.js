@@ -3,7 +3,9 @@ import { gql } from 'apollo-boost'
 import { Mutation } from 'react-apollo'
 import { Form, Formik, Field as FormikField } from 'formik'
 import * as yup from 'yup'
+import get from 'lodash.get'
 
+import Firebase from '../Firebase'
 import { Field, Checkbox } from '../Form'
 import { UserSelect } from '../Users'
 import { EquipmentTypeSelect } from '../EquipmentTypes'
@@ -70,33 +72,40 @@ const onSubmit = async (createEquipment, values, setSubmitting) => {
 const EquipmentCreateForm = () => (
   <Mutation mutation={CREATE_EQUIPMENT} update={update}>
     {(createEquipment, { loading, error }) => (
-      <Formik
-        initialValues={INITIAL_VALUES}
-        onSubmit={(values, { setSubmitting }) => onSubmit(createEquipment, values, setSubmitting)}
-        validationSchema={validationSchema}
-      >
-        {({
-          touched,
-          errors,
-          dirty,
-          isSubmitting,
-          handleReset,
-        }) => (
-          <Form>
-            <Field errors={errors} touched={touched} name="title" placeholder="Enter a title" />
-            <Field errors={errors} touched={touched} name="description" placeholder="Enter a description" />
-            <UserSelect errors={errors} touched={touched} name="owner" />
-            <FormikField component={Checkbox} name="published" id="published" label="Publish Equipment?" />
-            <EquipmentTypeSelect errors={errors} touched={touched} />
+      <Firebase>
+        {({ auth }) => (
+          <Formik
+            initialValues={{ ...INITIAL_VALUES, owner: get(auth, 'user.admin') ? '' : get(auth, 'user.uid') }}
+            onSubmit={(values, { setSubmitting }) => onSubmit(createEquipment, values, setSubmitting)}
+            validationSchema={validationSchema}
+          >
+            {({
+              touched,
+              errors,
+              dirty,
+              isSubmitting,
+              handleReset,
+            }) => (
+              <Form>
+                <Field errors={errors} touched={touched} name="title" placeholder="Enter a title" />
+                <Field errors={errors} touched={touched} name="description" placeholder="Enter a description" />
+                {get(auth, 'user.admin')
+                  ? <UserSelect errors={errors} touched={touched} name="owner" />
+                  : <Field hidden name="owner" />
+                }
+                <FormikField component={Checkbox} name="published" id="published" label="Publish Equipment?" />
+                <EquipmentTypeSelect errors={errors} touched={touched} />
 
-            {loading && <p>Loading...</p>}
-            {error && <p>{`Error :( Please try again. ${error.message}`}</p>}
+                {loading && <p>Loading...</p>}
+                {error && <p>{`Error :( Please try again. ${error.message}`}</p>}
 
-            <button type="button" className="outline" onClick={handleReset} disabled={!dirty || isSubmitting}>Reset</button>
-            <button type="submit" disabled={isSubmitting}>Submit</button>
-          </Form>
+                <button type="button" className="outline" onClick={handleReset} disabled={!dirty || isSubmitting}>Reset</button>
+                <button type="submit" disabled={isSubmitting}>Submit</button>
+              </Form>
+            )}
+          </Formik>
         )}
-      </Formik>
+      </Firebase>
     )}
   </Mutation>
 )

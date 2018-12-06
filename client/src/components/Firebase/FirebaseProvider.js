@@ -38,7 +38,6 @@ class FirebaseProvider extends React.Component {
             email: user.email,
             uid: user.uid,
             ...idTokenResult.claims,
-            admin: true,
           },
         })
       } else {
