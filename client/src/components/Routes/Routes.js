@@ -9,7 +9,7 @@ const Routes = () => (
   <Firebase>
     {({ auth }) => (
       get(auth, 'user.uid')
-        ? <AuthenticatedRoutes />
+        ? <AuthenticatedRoutes admin={get(auth, 'user.admin')} />
         : <PublicRoutes />
     )}
   </Firebase>

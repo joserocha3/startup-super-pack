@@ -1,13 +1,13 @@
 import user from './user'
 import equipmentType from './equipmentType'
 import equipment from './equipment'
-import availability from './availability'
+import listing from './listing'
 
 const Mutation = {
   ...user,
   ...equipmentType,
   ...equipment,
-  ...availability,
+  ...listing,
 }
 
 export default Mutation

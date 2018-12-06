@@ -3,14 +3,16 @@ import { Link } from '@reach/router'
 
 import { SignOutButton } from '../SignOut'
 import ROUTES from '../../constants/routes'
-import ROLES from '../../constants/roles'
 
-const AuthenticatedNav = ({ roles = [] }) => (
+const AuthenticatedNav = ({ admin }) => (
   <ul>
     <li><Link to={ROUTES.LANDING}>Landing</Link></li>
     <li><Link to={ROUTES.HOME}>Home</Link></li>
     <li><Link to={ROUTES.ACCOUNT}>Account</Link></li>
-    {roles.includes(ROLES.ADMIN) && <li><Link to={ROUTES.ADMIN}>Admin</Link></li>}
+    <li><Link to={ROUTES.EQUIPMENT}>Equipment</Link></li>
+    <li><Link to={ROUTES.LISTINGS}>Listings</Link></li>
+    {admin && <li><Link to={ROUTES.USERS}>Users</Link></li>}
+    {admin && <li><Link to={ROUTES.EQUIPMENT_TYPES}>Equipment Types</Link></li>}
     <li><SignOutButton /></li>
   </ul>
 )

@@ -4,7 +4,10 @@ const routes = {
   PASSWORD_RESET: '/amnesia',
   HOME: '/home',
   ACCOUNT: '/account',
-  ADMIN: '/admin',
+  USERS: '/users',
+  EQUIPMENT: '/equipment',
+  EQUIPMENT_TYPES: '/equipment-types',
+  LISTINGS: '/listings',
 }
 
 export default routes

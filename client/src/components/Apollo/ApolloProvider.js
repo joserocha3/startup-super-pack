@@ -1,6 +1,5 @@
 import React from 'react'
 import { ApolloProvider as Provider } from 'react-apollo'
-import get from 'lodash.get'
 
 import ApolloContext from './context'
 
@@ -10,7 +9,7 @@ import createApolloClient from '../../utilities/create-apollo-client'
 const ApolloProvider = ({ children }) => (
   <Firebase>
     {({ auth }) => {
-      const client = createApolloClient(get(auth, 'token'))
+      const client = createApolloClient(auth.getIdToken)
 
       const value = {
         client,

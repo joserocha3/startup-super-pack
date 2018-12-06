@@ -3,7 +3,6 @@ import app from '@firebase/app'
 import '@firebase/auth'
 
 import FirebaseContext from './context'
-import AUTH from '../../constants/auth'
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -16,7 +15,6 @@ const config = {
 
 const INITIAL_STATE = {
   user: null,
-  token: '',
 }
 
 class FirebaseProvider extends React.Component {
@@ -34,19 +32,16 @@ class FirebaseProvider extends React.Component {
     this.auth.onAuthStateChanged(async (user) => {
       this.setState({ loading: false })
       if (user) {
-        const token = await this.auth.currentUser.getIdToken()
         const idTokenResult = await this.auth.currentUser.getIdTokenResult()
-        localStorage.setItem(AUTH.TOKEN, token)
         this.setState({
           user: {
             email: user.email,
             uid: user.uid,
-            roles: [idTokenResult.claims.ADMIN ? 'ADMIN' : 'CLIENT'],
+            ...idTokenResult.claims,
+            admin: true,
           },
-          token,
         })
       } else {
-        localStorage.removeItem(AUTH.TOKEN)
         this.setState(INITIAL_STATE)
       }
     })
@@ -99,19 +94,30 @@ class FirebaseProvider extends React.Component {
     }
   }
 
+  getIdToken = async () => {
+    const { token } = this.state
+    try {
+      const newToken = await this.auth.currentUser.getIdToken()
+      if (newToken !== token) this.setState({ token: newToken })
+      return newToken
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
   render() {
-    const { user, token, loading } = this.state
+    const { user, loading } = this.state
     const { children } = this.props
 
     const auth = {
       user,
-      token,
       createUserWithEmailAndPassword: this.createUserWithEmailAndPassword,
       signInWithEmailAndPassword: this.signInWithEmailAndPassword,
       signOut: this.signOut,
       sendPasswordResetEmail: this.sendPasswordResetEmail,
       updatePassword: this.updatePassword,
       onAuthUserListener: this.onAuthUserListener,
+      getIdToken: this.getIdToken,
     }
 
     const value = {

@@ -9,7 +9,7 @@ const Navigation = () => (
   <Firebase>
     {({ auth }) => (
       get(auth, 'user.uid')
-        ? <AuthenticatedNavigation roles={get(auth, 'user.roles')} />
+        ? <AuthenticatedNavigation admin={get(auth, 'user.admin')} />
         : <PublicNavigation />
     )}
   </Firebase>

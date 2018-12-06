@@ -3,6 +3,18 @@ enum UserRole {
   CLIENT
 }
 
+enum EquipmentStatus {
+  DRAFT
+  PUBLISHED
+  BOOKED
+}
+
+enum ListingStatus {
+  DRAFT
+  PUBLISHED
+  BOOKED
+}
+
 type User {
   id: ID! @unique
   email: String! @unique
@@ -10,26 +22,34 @@ type User {
   firstName: String!
   lastName: String!
   role: UserRole!  
+  equipments: [Equipment!]!
+  listings: [Listing!]!
 }
 
 type EquipmentType {
   id: ID! @unique
+  title: String!
   description: String!
   equipments: [Equipment!]!
 }
 
 type Equipment {
   id: ID! @unique
+  title: String!
   description: String!
+  status: EquipmentStatus!
   type: EquipmentType!
   owner: User!
-  availabilities: [Availability!]!
+  listings: [Listing!]!
 }
 
-type Availability {
+type Listing {
   id: ID! @unique
-  equipment: Equipment!
+  title: String!
+  description: String!
   start: DateTime!
   end: DateTime!
-  booked: Boolean! @default(value: "false")
+  status: ListingStatus!
+  equipment: Equipment!
+  owner: User!
 }

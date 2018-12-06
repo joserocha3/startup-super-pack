@@ -7,9 +7,21 @@ directive @date(format: String) on FIELD_DEFINITION
 
 scalar DateTime
 
-enum Role {
+enum UserRole {
   ADMIN
   CLIENT
+}
+
+enum EquipmentStatus {
+  DRAFT
+  PUBLISHED
+  BOOKED
+}
+
+enum ListingStatus {
+  DRAFT
+  PUBLISHED
+  BOOKED
 }
 
 type User {
@@ -17,29 +29,37 @@ type User {
   email: String!
   firstName: String!
   lastName: String!
-  role: Role!
+  role: UserRole!
   equipment: [Equipment!]
+  listings: [Listing!]
 }
 
 type EquipmentType {
   id: ID!
+  title: String!
   description: String!
   equipments: [Equipment!]
 }
 
 type Equipment {
   id: ID!
+  title: String!
   description: String!
+  status: EquipmentStatus!
   type: EquipmentType!
   owner: User!
+  listings: [Listing!]
 }
 
-type Availability {
+type Listing {
   id: ID!
-  equipment: Equipment!
+  title: String!
+  description: String!
   start: DateTime!
   end: DateTime!
-  booked: Boolean
+  status: ListingStatus!
+  equipment: Equipment!
+  owner: User!
 }
 
 type Query {
@@ -50,8 +70,8 @@ type Query {
   equipmentType(id: ID!): EquipmentType!
   equipments: [Equipment!]
   equipment(id: ID!): Equipment!
-  availabilities: [Availability!]
-  availability(id: ID!): Availability!
+  listings: [Listing!]
+  listing(id: ID!): Listing!
 }
 
 input SignUpInput {
@@ -66,7 +86,7 @@ input CreateUserInput {
   password: String!
   firstName: String!
   lastName: String!
-  role: Role!
+  role: UserRole!
 }
 
 input UpdateUserInput {
@@ -74,50 +94,61 @@ input UpdateUserInput {
   password: String
   firstName: String
   lastName: String
-  role: Role
+  role: UserRole
 }
 
 input CreateEquipmentTypeInput {
+  title: String!
   description: String!
 }
 
 input UpdateEquipmentTypeInput {
+  title: String
   description: String
 }
 
 input CreateEquipmentInput {
+  title: String!
   description: String!
+  status: EquipmentStatus!
   type: ID!
   owner: ID!
 }
 
 input UpdateEquipmentInput {
+  title: String
   description: String
+  status: EquipmentStatus
   type: ID
 }
 
-input CreateAvailabilityInput {
-  equipment: ID!
+input CreateListingInput {
+  title: String!
+  description: String!
   start: DateTime!
   end: DateTime!
-  booked: Boolean
+  status: ListingStatus!
+  equipment: ID!
   owner: ID!
 }
 
-input UpdateAvailabilityInput {
+input UpdateListingInput {
+  title: String
+  description: String
   start: DateTime
   end: DateTime
-  booked: Boolean
+  status: ListingStatus
+  equipment: ID
 }
 
 type Mutation {
   signUp(data: SignUpInput!): User!
-  createUser(data: CreateUserInput!): User @hasRole(roles:["ADMIN"])
+  createUser(data: CreateUserInput!): User @hasRole(roles: ["ADMIN"])
   updateUser(id: ID!, data: UpdateUserInput): User @isAuthenticated
-  createEquipmentType(data: CreateEquipmentTypeInput!): EquipmentType @hasRole(roles:["ADMIN"])
-  updateEquipmentType(id: ID!, data: UpdateEquipmentTypeInput): EquipmentType @hasRole(roles:["ADMIN"])
+  createEquipmentType(data: CreateEquipmentTypeInput!): EquipmentType @hasRole(roles: ["ADMIN"])
+  updateEquipmentType(id: ID!, data: UpdateEquipmentTypeInput): EquipmentType @hasRole(roles: ["ADMIN"])
   createEquipment(data: CreateEquipmentInput!): Equipment @isAuthenticated
   updateEquipment(id: ID!, data: UpdateEquipmentInput): Equipment @isAuthenticated
-  createAvailability(data: CreateAvailabilityInput!): Availability @isAuthenticated
-  updateAvailability(id: ID!, data: UpdateAvailabilityInput): Availability @isAuthenticated
+  createListing(data: CreateListingInput!): Listing @isAuthenticated
+  updateListing(id: ID!, data: UpdateListingInput): Listing @isAuthenticated
 }

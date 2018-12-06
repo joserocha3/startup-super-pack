@@ -10,9 +10,9 @@ type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U];
 
 export interface Exists {
-  availability: (where?: AvailabilityWhereInput) => Promise<boolean>;
   equipment: (where?: EquipmentWhereInput) => Promise<boolean>;
   equipmentType: (where?: EquipmentTypeWhereInput) => Promise<boolean>;
+  listing: (where?: ListingWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -35,29 +35,6 @@ export interface Prisma {
    * Queries
    */
 
-  availability: (where: AvailabilityWhereUniqueInput) => AvailabilityPromise;
-  availabilities: (
-    args?: {
-      where?: AvailabilityWhereInput;
-      orderBy?: AvailabilityOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<Availability>;
-  availabilitiesConnection: (
-    args?: {
-      where?: AvailabilityWhereInput;
-      orderBy?: AvailabilityOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => AvailabilityConnectionPromise;
   equipment: (where: EquipmentWhereUniqueInput) => EquipmentPromise;
   equipments: (
     args?: {
@@ -104,6 +81,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => EquipmentTypeConnectionPromise;
+  listing: (where: ListingWhereUniqueInput) => ListingPromise;
+  listings: (
+    args?: {
+      where?: ListingWhereInput;
+      orderBy?: ListingOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Listing>;
+  listingsConnection: (
+    args?: {
+      where?: ListingWhereInput;
+      orderBy?: ListingOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => ListingConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserPromise;
   users: (
     args?: {
@@ -133,29 +133,6 @@ export interface Prisma {
    * Mutations
    */
 
-  createAvailability: (data: AvailabilityCreateInput) => AvailabilityPromise;
-  updateAvailability: (
-    args: { data: AvailabilityUpdateInput; where: AvailabilityWhereUniqueInput }
-  ) => AvailabilityPromise;
-  updateManyAvailabilities: (
-    args: {
-      data: AvailabilityUpdateManyMutationInput;
-      where?: AvailabilityWhereInput;
-    }
-  ) => BatchPayloadPromise;
-  upsertAvailability: (
-    args: {
-      where: AvailabilityWhereUniqueInput;
-      create: AvailabilityCreateInput;
-      update: AvailabilityUpdateInput;
-    }
-  ) => AvailabilityPromise;
-  deleteAvailability: (
-    where: AvailabilityWhereUniqueInput
-  ) => AvailabilityPromise;
-  deleteManyAvailabilities: (
-    where?: AvailabilityWhereInput
-  ) => BatchPayloadPromise;
   createEquipment: (data: EquipmentCreateInput) => EquipmentPromise;
   updateEquipment: (
     args: { data: EquipmentUpdateInput; where: EquipmentWhereUniqueInput }
@@ -201,6 +178,22 @@ export interface Prisma {
   deleteManyEquipmentTypes: (
     where?: EquipmentTypeWhereInput
   ) => BatchPayloadPromise;
+  createListing: (data: ListingCreateInput) => ListingPromise;
+  updateListing: (
+    args: { data: ListingUpdateInput; where: ListingWhereUniqueInput }
+  ) => ListingPromise;
+  updateManyListings: (
+    args: { data: ListingUpdateManyMutationInput; where?: ListingWhereInput }
+  ) => BatchPayloadPromise;
+  upsertListing: (
+    args: {
+      where: ListingWhereUniqueInput;
+      create: ListingCreateInput;
+      update: ListingUpdateInput;
+    }
+  ) => ListingPromise;
+  deleteListing: (where: ListingWhereUniqueInput) => ListingPromise;
+  deleteManyListings: (where?: ListingWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (
     args: { data: UserUpdateInput; where: UserWhereUniqueInput }
@@ -226,15 +219,15 @@ export interface Prisma {
 }
 
 export interface Subscription {
-  availability: (
-    where?: AvailabilitySubscriptionWhereInput
-  ) => AvailabilitySubscriptionPayloadSubscription;
   equipment: (
     where?: EquipmentSubscriptionWhereInput
   ) => EquipmentSubscriptionPayloadSubscription;
   equipmentType: (
     where?: EquipmentTypeSubscriptionWhereInput
   ) => EquipmentTypeSubscriptionPayloadSubscription;
+  listing: (
+    where?: ListingSubscriptionWhereInput
+  ) => ListingSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -248,27 +241,39 @@ export interface ClientConstructor<T> {
  * Types
  */
 
+export type EquipmentStatus = "DRAFT" | "PUBLISHED" | "BOOKED";
+
 export type UserRole = "ADMIN" | "CLIENT";
+
+export type ListingStatus = "DRAFT" | "PUBLISHED" | "BOOKED";
 
 export type EquipmentOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "title_ASC"
+  | "title_DESC"
   | "description_ASC"
   | "description_DESC"
+  | "status_ASC"
+  | "status_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type AvailabilityOrderByInput =
+export type ListingOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "title_ASC"
+  | "title_DESC"
+  | "description_ASC"
+  | "description_DESC"
   | "start_ASC"
   | "start_DESC"
   | "end_ASC"
   | "end_DESC"
-  | "booked_ASC"
-  | "booked_DESC"
+  | "status_ASC"
+  | "status_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -277,6 +282,8 @@ export type AvailabilityOrderByInput =
 export type EquipmentTypeOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "title_ASC"
+  | "title_DESC"
   | "description_ASC"
   | "description_DESC"
   | "createdAt_ASC"
@@ -304,7 +311,7 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export type AvailabilityWhereUniqueInput = AtLeastOne<{
+export type EquipmentWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
@@ -323,6 +330,20 @@ export interface EquipmentWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
   description?: String;
   description_not?: String;
   description_in?: String[] | String;
@@ -337,11 +358,15 @@ export interface EquipmentWhereInput {
   description_not_starts_with?: String;
   description_ends_with?: String;
   description_not_ends_with?: String;
+  status?: EquipmentStatus;
+  status_not?: EquipmentStatus;
+  status_in?: EquipmentStatus[] | EquipmentStatus;
+  status_not_in?: EquipmentStatus[] | EquipmentStatus;
   type?: EquipmentTypeWhereInput;
   owner?: UserWhereInput;
-  availabilities_every?: AvailabilityWhereInput;
-  availabilities_some?: AvailabilityWhereInput;
-  availabilities_none?: AvailabilityWhereInput;
+  listings_every?: ListingWhereInput;
+  listings_some?: ListingWhereInput;
+  listings_none?: ListingWhereInput;
   AND?: EquipmentWhereInput[] | EquipmentWhereInput;
   OR?: EquipmentWhereInput[] | EquipmentWhereInput;
   NOT?: EquipmentWhereInput[] | EquipmentWhereInput;
@@ -362,6 +387,20 @@ export interface EquipmentTypeWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
   description?: String;
   description_not?: String;
   description_in?: String[] | String;
@@ -459,12 +498,18 @@ export interface UserWhereInput {
   role_not?: UserRole;
   role_in?: UserRole[] | UserRole;
   role_not_in?: UserRole[] | UserRole;
+  equipments_every?: EquipmentWhereInput;
+  equipments_some?: EquipmentWhereInput;
+  equipments_none?: EquipmentWhereInput;
+  listings_every?: ListingWhereInput;
+  listings_some?: ListingWhereInput;
+  listings_none?: ListingWhereInput;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface AvailabilityWhereInput {
+export interface ListingWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -479,7 +524,34 @@ export interface AvailabilityWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  equipment?: EquipmentWhereInput;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  description?: String;
+  description_not?: String;
+  description_in?: String[] | String;
+  description_not_in?: String[] | String;
+  description_lt?: String;
+  description_lte?: String;
+  description_gt?: String;
+  description_gte?: String;
+  description_contains?: String;
+  description_not_contains?: String;
+  description_starts_with?: String;
+  description_not_starts_with?: String;
+  description_ends_with?: String;
+  description_not_ends_with?: String;
   start?: DateTimeInput;
   start_not?: DateTimeInput;
   start_in?: DateTimeInput[] | DateTimeInput;
@@ -496,18 +568,22 @@ export interface AvailabilityWhereInput {
   end_lte?: DateTimeInput;
   end_gt?: DateTimeInput;
   end_gte?: DateTimeInput;
-  booked?: Boolean;
-  booked_not?: Boolean;
-  AND?: AvailabilityWhereInput[] | AvailabilityWhereInput;
-  OR?: AvailabilityWhereInput[] | AvailabilityWhereInput;
-  NOT?: AvailabilityWhereInput[] | AvailabilityWhereInput;
+  status?: ListingStatus;
+  status_not?: ListingStatus;
+  status_in?: ListingStatus[] | ListingStatus;
+  status_not_in?: ListingStatus[] | ListingStatus;
+  equipment?: EquipmentWhereInput;
+  owner?: UserWhereInput;
+  AND?: ListingWhereInput[] | ListingWhereInput;
+  OR?: ListingWhereInput[] | ListingWhereInput;
+  NOT?: ListingWhereInput[] | ListingWhereInput;
 }
 
-export type EquipmentWhereUniqueInput = AtLeastOne<{
+export type EquipmentTypeWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export type EquipmentTypeWhereUniqueInput = AtLeastOne<{
+export type ListingWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
@@ -517,22 +593,13 @@ export type UserWhereUniqueInput = AtLeastOne<{
   authId?: String;
 }>;
 
-export interface AvailabilityCreateInput {
-  equipment: EquipmentCreateOneWithoutAvailabilitiesInput;
-  start: DateTimeInput;
-  end: DateTimeInput;
-  booked?: Boolean;
-}
-
-export interface EquipmentCreateOneWithoutAvailabilitiesInput {
-  create?: EquipmentCreateWithoutAvailabilitiesInput;
-  connect?: EquipmentWhereUniqueInput;
-}
-
-export interface EquipmentCreateWithoutAvailabilitiesInput {
+export interface EquipmentCreateInput {
+  title: String;
   description: String;
+  status: EquipmentStatus;
   type: EquipmentTypeCreateOneWithoutEquipmentsInput;
-  owner: UserCreateOneInput;
+  owner: UserCreateOneWithoutEquipmentsInput;
+  listings?: ListingCreateManyWithoutEquipmentInput;
 }
 
 export interface EquipmentTypeCreateOneWithoutEquipmentsInput {
@@ -541,40 +608,103 @@ export interface EquipmentTypeCreateOneWithoutEquipmentsInput {
 }
 
 export interface EquipmentTypeCreateWithoutEquipmentsInput {
+  title: String;
   description: String;
 }
 
-export interface UserCreateOneInput {
-  create?: UserCreateInput;
+export interface UserCreateOneWithoutEquipmentsInput {
+  create?: UserCreateWithoutEquipmentsInput;
   connect?: UserWhereUniqueInput;
 }
 
-export interface UserCreateInput {
+export interface UserCreateWithoutEquipmentsInput {
   email: String;
   authId?: String;
   firstName: String;
   lastName: String;
   role: UserRole;
+  listings?: ListingCreateManyWithoutOwnerInput;
 }
 
-export interface AvailabilityUpdateInput {
-  equipment?: EquipmentUpdateOneRequiredWithoutAvailabilitiesInput;
-  start?: DateTimeInput;
-  end?: DateTimeInput;
-  booked?: Boolean;
+export interface ListingCreateManyWithoutOwnerInput {
+  create?: ListingCreateWithoutOwnerInput[] | ListingCreateWithoutOwnerInput;
+  connect?: ListingWhereUniqueInput[] | ListingWhereUniqueInput;
 }
 
-export interface EquipmentUpdateOneRequiredWithoutAvailabilitiesInput {
-  create?: EquipmentCreateWithoutAvailabilitiesInput;
-  update?: EquipmentUpdateWithoutAvailabilitiesDataInput;
-  upsert?: EquipmentUpsertWithoutAvailabilitiesInput;
+export interface ListingCreateWithoutOwnerInput {
+  title: String;
+  description: String;
+  start: DateTimeInput;
+  end: DateTimeInput;
+  status: ListingStatus;
+  equipment: EquipmentCreateOneWithoutListingsInput;
+}
+
+export interface EquipmentCreateOneWithoutListingsInput {
+  create?: EquipmentCreateWithoutListingsInput;
   connect?: EquipmentWhereUniqueInput;
 }
 
-export interface EquipmentUpdateWithoutAvailabilitiesDataInput {
+export interface EquipmentCreateWithoutListingsInput {
+  title: String;
+  description: String;
+  status: EquipmentStatus;
+  type: EquipmentTypeCreateOneWithoutEquipmentsInput;
+  owner: UserCreateOneWithoutEquipmentsInput;
+}
+
+export interface ListingCreateManyWithoutEquipmentInput {
+  create?:
+    | ListingCreateWithoutEquipmentInput[]
+    | ListingCreateWithoutEquipmentInput;
+  connect?: ListingWhereUniqueInput[] | ListingWhereUniqueInput;
+}
+
+export interface ListingCreateWithoutEquipmentInput {
+  title: String;
+  description: String;
+  start: DateTimeInput;
+  end: DateTimeInput;
+  status: ListingStatus;
+  owner: UserCreateOneWithoutListingsInput;
+}
+
+export interface UserCreateOneWithoutListingsInput {
+  create?: UserCreateWithoutListingsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserCreateWithoutListingsInput {
+  email: String;
+  authId?: String;
+  firstName: String;
+  lastName: String;
+  role: UserRole;
+  equipments?: EquipmentCreateManyWithoutOwnerInput;
+}
+
+export interface EquipmentCreateManyWithoutOwnerInput {
+  create?:
+    | EquipmentCreateWithoutOwnerInput[]
+    | EquipmentCreateWithoutOwnerInput;
+  connect?: EquipmentWhereUniqueInput[] | EquipmentWhereUniqueInput;
+}
+
+export interface EquipmentCreateWithoutOwnerInput {
+  title: String;
+  description: String;
+  status: EquipmentStatus;
+  type: EquipmentTypeCreateOneWithoutEquipmentsInput;
+  listings?: ListingCreateManyWithoutEquipmentInput;
+}
+
+export interface EquipmentUpdateInput {
+  title?: String;
   description?: String;
+  status?: EquipmentStatus;
   type?: EquipmentTypeUpdateOneRequiredWithoutEquipmentsInput;
-  owner?: UserUpdateOneRequiredInput;
+  owner?: UserUpdateOneRequiredWithoutEquipmentsInput;
+  listings?: ListingUpdateManyWithoutEquipmentInput;
 }
 
 export interface EquipmentTypeUpdateOneRequiredWithoutEquipmentsInput {
@@ -585,6 +715,7 @@ export interface EquipmentTypeUpdateOneRequiredWithoutEquipmentsInput {
 }
 
 export interface EquipmentTypeUpdateWithoutEquipmentsDataInput {
+  title?: String;
   description?: String;
 }
 
@@ -593,101 +724,178 @@ export interface EquipmentTypeUpsertWithoutEquipmentsInput {
   create: EquipmentTypeCreateWithoutEquipmentsInput;
 }
 
-export interface UserUpdateOneRequiredInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
+export interface UserUpdateOneRequiredWithoutEquipmentsInput {
+  create?: UserCreateWithoutEquipmentsInput;
+  update?: UserUpdateWithoutEquipmentsDataInput;
+  upsert?: UserUpsertWithoutEquipmentsInput;
   connect?: UserWhereUniqueInput;
 }
 
-export interface UserUpdateDataInput {
+export interface UserUpdateWithoutEquipmentsDataInput {
   email?: String;
   authId?: String;
   firstName?: String;
   lastName?: String;
   role?: UserRole;
+  listings?: ListingUpdateManyWithoutOwnerInput;
 }
 
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
-}
-
-export interface EquipmentUpsertWithoutAvailabilitiesInput {
-  update: EquipmentUpdateWithoutAvailabilitiesDataInput;
-  create: EquipmentCreateWithoutAvailabilitiesInput;
-}
-
-export interface AvailabilityUpdateManyMutationInput {
-  start?: DateTimeInput;
-  end?: DateTimeInput;
-  booked?: Boolean;
-}
-
-export interface EquipmentCreateInput {
-  description: String;
-  type: EquipmentTypeCreateOneWithoutEquipmentsInput;
-  owner: UserCreateOneInput;
-  availabilities?: AvailabilityCreateManyWithoutEquipmentInput;
-}
-
-export interface AvailabilityCreateManyWithoutEquipmentInput {
-  create?:
-    | AvailabilityCreateWithoutEquipmentInput[]
-    | AvailabilityCreateWithoutEquipmentInput;
-  connect?: AvailabilityWhereUniqueInput[] | AvailabilityWhereUniqueInput;
-}
-
-export interface AvailabilityCreateWithoutEquipmentInput {
-  start: DateTimeInput;
-  end: DateTimeInput;
-  booked?: Boolean;
-}
-
-export interface EquipmentUpdateInput {
-  description?: String;
-  type?: EquipmentTypeUpdateOneRequiredWithoutEquipmentsInput;
-  owner?: UserUpdateOneRequiredInput;
-  availabilities?: AvailabilityUpdateManyWithoutEquipmentInput;
-}
-
-export interface AvailabilityUpdateManyWithoutEquipmentInput {
-  create?:
-    | AvailabilityCreateWithoutEquipmentInput[]
-    | AvailabilityCreateWithoutEquipmentInput;
-  delete?: AvailabilityWhereUniqueInput[] | AvailabilityWhereUniqueInput;
-  connect?: AvailabilityWhereUniqueInput[] | AvailabilityWhereUniqueInput;
-  disconnect?: AvailabilityWhereUniqueInput[] | AvailabilityWhereUniqueInput;
+export interface ListingUpdateManyWithoutOwnerInput {
+  create?: ListingCreateWithoutOwnerInput[] | ListingCreateWithoutOwnerInput;
+  delete?: ListingWhereUniqueInput[] | ListingWhereUniqueInput;
+  connect?: ListingWhereUniqueInput[] | ListingWhereUniqueInput;
+  disconnect?: ListingWhereUniqueInput[] | ListingWhereUniqueInput;
   update?:
-    | AvailabilityUpdateWithWhereUniqueWithoutEquipmentInput[]
-    | AvailabilityUpdateWithWhereUniqueWithoutEquipmentInput;
+    | ListingUpdateWithWhereUniqueWithoutOwnerInput[]
+    | ListingUpdateWithWhereUniqueWithoutOwnerInput;
   upsert?:
-    | AvailabilityUpsertWithWhereUniqueWithoutEquipmentInput[]
-    | AvailabilityUpsertWithWhereUniqueWithoutEquipmentInput;
+    | ListingUpsertWithWhereUniqueWithoutOwnerInput[]
+    | ListingUpsertWithWhereUniqueWithoutOwnerInput;
 }
 
-export interface AvailabilityUpdateWithWhereUniqueWithoutEquipmentInput {
-  where: AvailabilityWhereUniqueInput;
-  data: AvailabilityUpdateWithoutEquipmentDataInput;
+export interface ListingUpdateWithWhereUniqueWithoutOwnerInput {
+  where: ListingWhereUniqueInput;
+  data: ListingUpdateWithoutOwnerDataInput;
 }
 
-export interface AvailabilityUpdateWithoutEquipmentDataInput {
+export interface ListingUpdateWithoutOwnerDataInput {
+  title?: String;
+  description?: String;
   start?: DateTimeInput;
   end?: DateTimeInput;
-  booked?: Boolean;
+  status?: ListingStatus;
+  equipment?: EquipmentUpdateOneRequiredWithoutListingsInput;
 }
 
-export interface AvailabilityUpsertWithWhereUniqueWithoutEquipmentInput {
-  where: AvailabilityWhereUniqueInput;
-  update: AvailabilityUpdateWithoutEquipmentDataInput;
-  create: AvailabilityCreateWithoutEquipmentInput;
+export interface EquipmentUpdateOneRequiredWithoutListingsInput {
+  create?: EquipmentCreateWithoutListingsInput;
+  update?: EquipmentUpdateWithoutListingsDataInput;
+  upsert?: EquipmentUpsertWithoutListingsInput;
+  connect?: EquipmentWhereUniqueInput;
+}
+
+export interface EquipmentUpdateWithoutListingsDataInput {
+  title?: String;
+  description?: String;
+  status?: EquipmentStatus;
+  type?: EquipmentTypeUpdateOneRequiredWithoutEquipmentsInput;
+  owner?: UserUpdateOneRequiredWithoutEquipmentsInput;
+}
+
+export interface EquipmentUpsertWithoutListingsInput {
+  update: EquipmentUpdateWithoutListingsDataInput;
+  create: EquipmentCreateWithoutListingsInput;
+}
+
+export interface ListingUpsertWithWhereUniqueWithoutOwnerInput {
+  where: ListingWhereUniqueInput;
+  update: ListingUpdateWithoutOwnerDataInput;
+  create: ListingCreateWithoutOwnerInput;
+}
+
+export interface UserUpsertWithoutEquipmentsInput {
+  update: UserUpdateWithoutEquipmentsDataInput;
+  create: UserCreateWithoutEquipmentsInput;
+}
+
+export interface ListingUpdateManyWithoutEquipmentInput {
+  create?:
+    | ListingCreateWithoutEquipmentInput[]
+    | ListingCreateWithoutEquipmentInput;
+  delete?: ListingWhereUniqueInput[] | ListingWhereUniqueInput;
+  connect?: ListingWhereUniqueInput[] | ListingWhereUniqueInput;
+  disconnect?: ListingWhereUniqueInput[] | ListingWhereUniqueInput;
+  update?:
+    | ListingUpdateWithWhereUniqueWithoutEquipmentInput[]
+    | ListingUpdateWithWhereUniqueWithoutEquipmentInput;
+  upsert?:
+    | ListingUpsertWithWhereUniqueWithoutEquipmentInput[]
+    | ListingUpsertWithWhereUniqueWithoutEquipmentInput;
+}
+
+export interface ListingUpdateWithWhereUniqueWithoutEquipmentInput {
+  where: ListingWhereUniqueInput;
+  data: ListingUpdateWithoutEquipmentDataInput;
+}
+
+export interface ListingUpdateWithoutEquipmentDataInput {
+  title?: String;
+  description?: String;
+  start?: DateTimeInput;
+  end?: DateTimeInput;
+  status?: ListingStatus;
+  owner?: UserUpdateOneRequiredWithoutListingsInput;
+}
+
+export interface UserUpdateOneRequiredWithoutListingsInput {
+  create?: UserCreateWithoutListingsInput;
+  update?: UserUpdateWithoutListingsDataInput;
+  upsert?: UserUpsertWithoutListingsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpdateWithoutListingsDataInput {
+  email?: String;
+  authId?: String;
+  firstName?: String;
+  lastName?: String;
+  role?: UserRole;
+  equipments?: EquipmentUpdateManyWithoutOwnerInput;
+}
+
+export interface EquipmentUpdateManyWithoutOwnerInput {
+  create?:
+    | EquipmentCreateWithoutOwnerInput[]
+    | EquipmentCreateWithoutOwnerInput;
+  delete?: EquipmentWhereUniqueInput[] | EquipmentWhereUniqueInput;
+  connect?: EquipmentWhereUniqueInput[] | EquipmentWhereUniqueInput;
+  disconnect?: EquipmentWhereUniqueInput[] | EquipmentWhereUniqueInput;
+  update?:
+    | EquipmentUpdateWithWhereUniqueWithoutOwnerInput[]
+    | EquipmentUpdateWithWhereUniqueWithoutOwnerInput;
+  upsert?:
+    | EquipmentUpsertWithWhereUniqueWithoutOwnerInput[]
+    | EquipmentUpsertWithWhereUniqueWithoutOwnerInput;
+}
+
+export interface EquipmentUpdateWithWhereUniqueWithoutOwnerInput {
+  where: EquipmentWhereUniqueInput;
+  data: EquipmentUpdateWithoutOwnerDataInput;
+}
+
+export interface EquipmentUpdateWithoutOwnerDataInput {
+  title?: String;
+  description?: String;
+  status?: EquipmentStatus;
+  type?: EquipmentTypeUpdateOneRequiredWithoutEquipmentsInput;
+  listings?: ListingUpdateManyWithoutEquipmentInput;
+}
+
+export interface EquipmentUpsertWithWhereUniqueWithoutOwnerInput {
+  where: EquipmentWhereUniqueInput;
+  update: EquipmentUpdateWithoutOwnerDataInput;
+  create: EquipmentCreateWithoutOwnerInput;
+}
+
+export interface UserUpsertWithoutListingsInput {
+  update: UserUpdateWithoutListingsDataInput;
+  create: UserCreateWithoutListingsInput;
+}
+
+export interface ListingUpsertWithWhereUniqueWithoutEquipmentInput {
+  where: ListingWhereUniqueInput;
+  update: ListingUpdateWithoutEquipmentDataInput;
+  create: ListingCreateWithoutEquipmentInput;
 }
 
 export interface EquipmentUpdateManyMutationInput {
+  title?: String;
   description?: String;
+  status?: EquipmentStatus;
 }
 
 export interface EquipmentTypeCreateInput {
+  title: String;
   description: String;
   equipments?: EquipmentCreateManyWithoutTypeInput;
 }
@@ -698,12 +906,15 @@ export interface EquipmentCreateManyWithoutTypeInput {
 }
 
 export interface EquipmentCreateWithoutTypeInput {
+  title: String;
   description: String;
-  owner: UserCreateOneInput;
-  availabilities?: AvailabilityCreateManyWithoutEquipmentInput;
+  status: EquipmentStatus;
+  owner: UserCreateOneWithoutEquipmentsInput;
+  listings?: ListingCreateManyWithoutEquipmentInput;
 }
 
 export interface EquipmentTypeUpdateInput {
+  title?: String;
   description?: String;
   equipments?: EquipmentUpdateManyWithoutTypeInput;
 }
@@ -727,9 +938,11 @@ export interface EquipmentUpdateWithWhereUniqueWithoutTypeInput {
 }
 
 export interface EquipmentUpdateWithoutTypeDataInput {
+  title?: String;
   description?: String;
-  owner?: UserUpdateOneRequiredInput;
-  availabilities?: AvailabilityUpdateManyWithoutEquipmentInput;
+  status?: EquipmentStatus;
+  owner?: UserUpdateOneRequiredWithoutEquipmentsInput;
+  listings?: ListingUpdateManyWithoutEquipmentInput;
 }
 
 export interface EquipmentUpsertWithWhereUniqueWithoutTypeInput {
@@ -739,7 +952,46 @@ export interface EquipmentUpsertWithWhereUniqueWithoutTypeInput {
 }
 
 export interface EquipmentTypeUpdateManyMutationInput {
+  title?: String;
   description?: String;
+}
+
+export interface ListingCreateInput {
+  title: String;
+  description: String;
+  start: DateTimeInput;
+  end: DateTimeInput;
+  status: ListingStatus;
+  equipment: EquipmentCreateOneWithoutListingsInput;
+  owner: UserCreateOneWithoutListingsInput;
+}
+
+export interface ListingUpdateInput {
+  title?: String;
+  description?: String;
+  start?: DateTimeInput;
+  end?: DateTimeInput;
+  status?: ListingStatus;
+  equipment?: EquipmentUpdateOneRequiredWithoutListingsInput;
+  owner?: UserUpdateOneRequiredWithoutListingsInput;
+}
+
+export interface ListingUpdateManyMutationInput {
+  title?: String;
+  description?: String;
+  start?: DateTimeInput;
+  end?: DateTimeInput;
+  status?: ListingStatus;
+}
+
+export interface UserCreateInput {
+  email: String;
+  authId?: String;
+  firstName: String;
+  lastName: String;
+  role: UserRole;
+  equipments?: EquipmentCreateManyWithoutOwnerInput;
+  listings?: ListingCreateManyWithoutOwnerInput;
 }
 
 export interface UserUpdateInput {
@@ -748,6 +1000,8 @@ export interface UserUpdateInput {
   firstName?: String;
   lastName?: String;
   role?: UserRole;
+  equipments?: EquipmentUpdateManyWithoutOwnerInput;
+  listings?: ListingUpdateManyWithoutOwnerInput;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -756,23 +1010,6 @@ export interface UserUpdateManyMutationInput {
   firstName?: String;
   lastName?: String;
   role?: UserRole;
-}
-
-export interface AvailabilitySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: AvailabilityWhereInput;
-  AND?:
-    | AvailabilitySubscriptionWhereInput[]
-    | AvailabilitySubscriptionWhereInput;
-  OR?:
-    | AvailabilitySubscriptionWhereInput[]
-    | AvailabilitySubscriptionWhereInput;
-  NOT?:
-    | AvailabilitySubscriptionWhereInput[]
-    | AvailabilitySubscriptionWhereInput;
 }
 
 export interface EquipmentSubscriptionWhereInput {
@@ -803,6 +1040,17 @@ export interface EquipmentTypeSubscriptionWhereInput {
     | EquipmentTypeSubscriptionWhereInput;
 }
 
+export interface ListingSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ListingWhereInput;
+  AND?: ListingSubscriptionWhereInput[] | ListingSubscriptionWhereInput;
+  OR?: ListingSubscriptionWhereInput[] | ListingSubscriptionWhereInput;
+  NOT?: ListingSubscriptionWhereInput[] | ListingSubscriptionWhereInput;
+}
+
 export interface UserSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
@@ -818,47 +1066,24 @@ export interface NodeNode {
   id: ID_Output;
 }
 
-export interface Availability {
-  id: ID_Output;
-  start: DateTimeOutput;
-  end: DateTimeOutput;
-  booked: Boolean;
-}
-
-export interface AvailabilityPromise
-  extends Promise<Availability>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  equipment: <T = EquipmentPromise>() => T;
-  start: () => Promise<DateTimeOutput>;
-  end: () => Promise<DateTimeOutput>;
-  booked: () => Promise<Boolean>;
-}
-
-export interface AvailabilitySubscription
-  extends Promise<AsyncIterator<Availability>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  equipment: <T = EquipmentSubscription>() => T;
-  start: () => Promise<AsyncIterator<DateTimeOutput>>;
-  end: () => Promise<AsyncIterator<DateTimeOutput>>;
-  booked: () => Promise<AsyncIterator<Boolean>>;
-}
-
 export interface Equipment {
   id: ID_Output;
+  title: String;
   description: String;
+  status: EquipmentStatus;
 }
 
 export interface EquipmentPromise extends Promise<Equipment>, Fragmentable {
   id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
   description: () => Promise<String>;
+  status: () => Promise<EquipmentStatus>;
   type: <T = EquipmentTypePromise>() => T;
   owner: <T = UserPromise>() => T;
-  availabilities: <T = FragmentableArray<Availability>>(
+  listings: <T = FragmentableArray<Listing>>(
     args?: {
-      where?: AvailabilityWhereInput;
-      orderBy?: AvailabilityOrderByInput;
+      where?: ListingWhereInput;
+      orderBy?: ListingOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
@@ -872,13 +1097,15 @@ export interface EquipmentSubscription
   extends Promise<AsyncIterator<Equipment>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
   description: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<EquipmentStatus>>;
   type: <T = EquipmentTypeSubscription>() => T;
   owner: <T = UserSubscription>() => T;
-  availabilities: <T = Promise<AsyncIterator<AvailabilitySubscription>>>(
+  listings: <T = Promise<AsyncIterator<ListingSubscription>>>(
     args?: {
-      where?: AvailabilityWhereInput;
-      orderBy?: AvailabilityOrderByInput;
+      where?: ListingWhereInput;
+      orderBy?: ListingOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
@@ -890,6 +1117,7 @@ export interface EquipmentSubscription
 
 export interface EquipmentType {
   id: ID_Output;
+  title: String;
   description: String;
 }
 
@@ -897,6 +1125,7 @@ export interface EquipmentTypePromise
   extends Promise<EquipmentType>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
   description: () => Promise<String>;
   equipments: <T = FragmentableArray<Equipment>>(
     args?: {
@@ -915,6 +1144,7 @@ export interface EquipmentTypeSubscription
   extends Promise<AsyncIterator<EquipmentType>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
   description: () => Promise<AsyncIterator<String>>;
   equipments: <T = Promise<AsyncIterator<EquipmentSubscription>>>(
     args?: {
@@ -945,6 +1175,28 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   firstName: () => Promise<String>;
   lastName: () => Promise<String>;
   role: () => Promise<UserRole>;
+  equipments: <T = FragmentableArray<Equipment>>(
+    args?: {
+      where?: EquipmentWhereInput;
+      orderBy?: EquipmentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  listings: <T = FragmentableArray<Listing>>(
+    args?: {
+      where?: ListingWhereInput;
+      orderBy?: ListingOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
 export interface UserSubscription
@@ -956,24 +1208,79 @@ export interface UserSubscription
   firstName: () => Promise<AsyncIterator<String>>;
   lastName: () => Promise<AsyncIterator<String>>;
   role: () => Promise<AsyncIterator<UserRole>>;
+  equipments: <T = Promise<AsyncIterator<EquipmentSubscription>>>(
+    args?: {
+      where?: EquipmentWhereInput;
+      orderBy?: EquipmentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  listings: <T = Promise<AsyncIterator<ListingSubscription>>>(
+    args?: {
+      where?: ListingWhereInput;
+      orderBy?: ListingOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface AvailabilityConnection {}
+export interface Listing {
+  id: ID_Output;
+  title: String;
+  description: String;
+  start: DateTimeOutput;
+  end: DateTimeOutput;
+  status: ListingStatus;
+}
 
-export interface AvailabilityConnectionPromise
-  extends Promise<AvailabilityConnection>,
+export interface ListingPromise extends Promise<Listing>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
+  description: () => Promise<String>;
+  start: () => Promise<DateTimeOutput>;
+  end: () => Promise<DateTimeOutput>;
+  status: () => Promise<ListingStatus>;
+  equipment: <T = EquipmentPromise>() => T;
+  owner: <T = UserPromise>() => T;
+}
+
+export interface ListingSubscription
+  extends Promise<AsyncIterator<Listing>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
+  description: () => Promise<AsyncIterator<String>>;
+  start: () => Promise<AsyncIterator<DateTimeOutput>>;
+  end: () => Promise<AsyncIterator<DateTimeOutput>>;
+  status: () => Promise<AsyncIterator<ListingStatus>>;
+  equipment: <T = EquipmentSubscription>() => T;
+  owner: <T = UserSubscription>() => T;
+}
+
+export interface EquipmentConnection {}
+
+export interface EquipmentConnectionPromise
+  extends Promise<EquipmentConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<AvailabilityEdge>>() => T;
-  aggregate: <T = AggregateAvailabilityPromise>() => T;
+  edges: <T = FragmentableArray<EquipmentEdge>>() => T;
+  aggregate: <T = AggregateEquipmentPromise>() => T;
 }
 
-export interface AvailabilityConnectionSubscription
-  extends Promise<AsyncIterator<AvailabilityConnection>>,
+export interface EquipmentConnectionSubscription
+  extends Promise<AsyncIterator<EquipmentConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<AvailabilityEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateAvailabilitySubscription>() => T;
+  edges: <T = Promise<AsyncIterator<EquipmentEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateEquipmentSubscription>() => T;
 }
 
 export interface PageInfo {
@@ -997,58 +1304,6 @@ export interface PageInfoSubscription
   hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
   startCursor: () => Promise<AsyncIterator<String>>;
   endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AvailabilityEdge {
-  cursor: String;
-}
-
-export interface AvailabilityEdgePromise
-  extends Promise<AvailabilityEdge>,
-    Fragmentable {
-  node: <T = AvailabilityPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface AvailabilityEdgeSubscription
-  extends Promise<AsyncIterator<AvailabilityEdge>>,
-    Fragmentable {
-  node: <T = AvailabilitySubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateAvailability {
-  count: Int;
-}
-
-export interface AggregateAvailabilityPromise
-  extends Promise<AggregateAvailability>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateAvailabilitySubscription
-  extends Promise<AsyncIterator<AggregateAvailability>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface EquipmentConnection {}
-
-export interface EquipmentConnectionPromise
-  extends Promise<EquipmentConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<EquipmentEdge>>() => T;
-  aggregate: <T = AggregateEquipmentPromise>() => T;
-}
-
-export interface EquipmentConnectionSubscription
-  extends Promise<AsyncIterator<EquipmentConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<EquipmentEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateEquipmentSubscription>() => T;
 }
 
 export interface EquipmentEdge {
@@ -1137,6 +1392,56 @@ export interface AggregateEquipmentTypeSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface ListingConnection {}
+
+export interface ListingConnectionPromise
+  extends Promise<ListingConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ListingEdge>>() => T;
+  aggregate: <T = AggregateListingPromise>() => T;
+}
+
+export interface ListingConnectionSubscription
+  extends Promise<AsyncIterator<ListingConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ListingEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateListingSubscription>() => T;
+}
+
+export interface ListingEdge {
+  cursor: String;
+}
+
+export interface ListingEdgePromise extends Promise<ListingEdge>, Fragmentable {
+  node: <T = ListingPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ListingEdgeSubscription
+  extends Promise<AsyncIterator<ListingEdge>>,
+    Fragmentable {
+  node: <T = ListingSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateListing {
+  count: Int;
+}
+
+export interface AggregateListingPromise
+  extends Promise<AggregateListing>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateListingSubscription
+  extends Promise<AsyncIterator<AggregateListing>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface UserConnection {}
 
 export interface UserConnectionPromise
@@ -1203,54 +1508,6 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface AvailabilitySubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface AvailabilitySubscriptionPayloadPromise
-  extends Promise<AvailabilitySubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = AvailabilityPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = AvailabilityPreviousValuesPromise>() => T;
-}
-
-export interface AvailabilitySubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<AvailabilitySubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = AvailabilitySubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = AvailabilityPreviousValuesSubscription>() => T;
-}
-
-export interface AvailabilityPreviousValues {
-  id: ID_Output;
-  start: DateTimeOutput;
-  end: DateTimeOutput;
-  booked: Boolean;
-}
-
-export interface AvailabilityPreviousValuesPromise
-  extends Promise<AvailabilityPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  start: () => Promise<DateTimeOutput>;
-  end: () => Promise<DateTimeOutput>;
-  booked: () => Promise<Boolean>;
-}
-
-export interface AvailabilityPreviousValuesSubscription
-  extends Promise<AsyncIterator<AvailabilityPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  start: () => Promise<AsyncIterator<DateTimeOutput>>;
-  end: () => Promise<AsyncIterator<DateTimeOutput>>;
-  booked: () => Promise<AsyncIterator<Boolean>>;
-}
-
 export interface EquipmentSubscriptionPayload {
   mutation: MutationType;
   updatedFields?: String[];
@@ -1276,21 +1533,27 @@ export interface EquipmentSubscriptionPayloadSubscription
 
 export interface EquipmentPreviousValues {
   id: ID_Output;
+  title: String;
   description: String;
+  status: EquipmentStatus;
 }
 
 export interface EquipmentPreviousValuesPromise
   extends Promise<EquipmentPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
   description: () => Promise<String>;
+  status: () => Promise<EquipmentStatus>;
 }
 
 export interface EquipmentPreviousValuesSubscription
   extends Promise<AsyncIterator<EquipmentPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
   description: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<EquipmentStatus>>;
 }
 
 export interface EquipmentTypeSubscriptionPayload {
@@ -1318,6 +1581,7 @@ export interface EquipmentTypeSubscriptionPayloadSubscription
 
 export interface EquipmentTypePreviousValues {
   id: ID_Output;
+  title: String;
   description: String;
 }
 
@@ -1325,6 +1589,7 @@ export interface EquipmentTypePreviousValuesPromise
   extends Promise<EquipmentTypePreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
   description: () => Promise<String>;
 }
 
@@ -1332,7 +1597,62 @@ export interface EquipmentTypePreviousValuesSubscription
   extends Promise<AsyncIterator<EquipmentTypePreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
   description: () => Promise<AsyncIterator<String>>;
+}
+
+export interface ListingSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface ListingSubscriptionPayloadPromise
+  extends Promise<ListingSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ListingPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ListingPreviousValuesPromise>() => T;
+}
+
+export interface ListingSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ListingSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ListingSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ListingPreviousValuesSubscription>() => T;
+}
+
+export interface ListingPreviousValues {
+  id: ID_Output;
+  title: String;
+  description: String;
+  start: DateTimeOutput;
+  end: DateTimeOutput;
+  status: ListingStatus;
+}
+
+export interface ListingPreviousValuesPromise
+  extends Promise<ListingPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
+  description: () => Promise<String>;
+  start: () => Promise<DateTimeOutput>;
+  end: () => Promise<DateTimeOutput>;
+  status: () => Promise<ListingStatus>;
+}
+
+export interface ListingPreviousValuesSubscription
+  extends Promise<AsyncIterator<ListingPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
+  description: () => Promise<AsyncIterator<String>>;
+  start: () => Promise<AsyncIterator<DateTimeOutput>>;
+  end: () => Promise<AsyncIterator<DateTimeOutput>>;
+  status: () => Promise<AsyncIterator<ListingStatus>>;
 }
 
 export interface UserSubscriptionPayload {
@@ -1411,14 +1731,14 @@ DateTime scalar output type, which is always a string
 export type DateTimeOutput = string;
 
 /*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
-
-/*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
 export type Int = number;
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
 
 export type Long = string;
 
@@ -1428,15 +1748,23 @@ export type Long = string;
 
 export const models = [
   {
-    name: "Availability",
-    embedded: false
-  },
-  {
     name: "Equipment",
     embedded: false
   },
   {
+    name: "EquipmentStatus",
+    embedded: false
+  },
+  {
     name: "EquipmentType",
+    embedded: false
+  },
+  {
+    name: "Listing",
+    embedded: false
+  },
+  {
+    name: "ListingStatus",
     embedded: false
   },
   {

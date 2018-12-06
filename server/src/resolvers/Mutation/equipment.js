@@ -1,8 +1,10 @@
 import * as yup from 'yup'
 
 const createEquipmentSchema = yup.object().shape({
-  description: yup.string().required('Email address is required'),
-  type: yup.string().required('Type is required'),
+  title: yup.string().required(),
+  description: yup.string().required(),
+  type: yup.string().required(),
+  status: yup.mixed().oneOf(['PUBLISHED', 'DRAFT']).required(),
   owner: yup.string(),
 })
 
@@ -12,16 +14,12 @@ const createEquipment = async (root, { data }, { db }, info) => {
 
   // Create in database
   return db.mutation.createEquipment({
-    description: data.description,
-    type: {
-      connect: {
-        id: data.type,
-      },
-    },
-    owner: {
-      connect: {
-        id: data.owner,
-      },
+    data: {
+      title: data.title,
+      description: data.description,
+      status: data.status,
+      type: { connect: { id: data.type } },
+      owner: { connect: { id: data.owner } },
     },
   }, info)
 }
@@ -41,9 +39,9 @@ const updateEquipment = async (root, { id, data }, { db }, info) => (data.type
     },
   }, info))
 
-const mutations = {
+const equipment = {
   createEquipment,
   updateEquipment,
 }
 
-export default mutations
+export default equipment
