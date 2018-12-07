@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { gql } from 'apollo-boost'
-import { Mutation } from 'react-apollo'
-import { Form, Formik, Field as FormikField } from 'formik'
+import { useMutation } from 'react-apollo-hooks'
+import { Form, Formik } from 'formik'
 import * as yup from 'yup'
-import get from 'lodash.get'
 
 import Firebase from '../Firebase'
 import { Field, Checkbox } from '../Form'
@@ -11,14 +10,6 @@ import { UserSelect } from '../Users'
 import { EquipmentTypeSelect } from '../EquipmentTypes'
 
 import { EQUIPMENTS_QUERY } from '.'
-
-const INITIAL_VALUES = {
-  title: '',
-  description: '',
-  type: '',
-  published: false,
-  owner: '',
-}
 
 const CREATE_EQUIPMENT = gql`
   mutation createEquipment(
@@ -61,22 +52,47 @@ const update = (cache, { data: { createEquipment } }) => {
   })
 }
 
-const onSubmit = async (createEquipment, values, setSubmitting) => {
-  try {
-    await createEquipment({ variables: { ...values, status: values.published ? 'PUBLISHED' : 'DRAFT' } })
-  } finally {
-    setSubmitting(false)
-  }
-}
+const EquipmentCreateForm = () => {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
-const EquipmentCreateForm = () => (
-  <Mutation mutation={CREATE_EQUIPMENT} update={update}>
-    {(createEquipment, { loading, error }) => (
-      <Firebase>
-        {({ auth }) => (
+  const createEquipment = useMutation(
+    CREATE_EQUIPMENT, {
+      update,
+    },
+  )
+
+  const onSubmit = async (values, { setSubmitting }) => {
+    setLoading(true)
+    const variables = {
+      ...values,
+      status: values.published ? 'PUBLISHED' : 'DRAFT',
+    }
+    try {
+      await createEquipment({ variables })
+    } catch (err) {
+      setError(err)
+    } finally {
+      setSubmitting(false)
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Firebase>
+      {({ auth: { user } }) => {
+        const initialValues = {
+          title: '',
+          description: '',
+          type: '',
+          published: false,
+          owner: user.admin ? '' : user.uid,
+        }
+
+        return (
           <Formik
-            initialValues={{ ...INITIAL_VALUES, owner: get(auth, 'user.admin') ? '' : get(auth, 'user.uid') }}
-            onSubmit={(values, { setSubmitting }) => onSubmit(createEquipment, values, setSubmitting)}
+            initialValues={initialValues}
+            onSubmit={onSubmit}
             validationSchema={validationSchema}
           >
             {({
@@ -89,11 +105,11 @@ const EquipmentCreateForm = () => (
               <Form>
                 <Field errors={errors} touched={touched} name="title" placeholder="Enter a title" />
                 <Field errors={errors} touched={touched} name="description" placeholder="Enter a description" />
-                {get(auth, 'user.admin')
+                {user.admin
                   ? <UserSelect errors={errors} touched={touched} name="owner" />
                   : <Field hidden name="owner" />
-                }
-                <FormikField component={Checkbox} name="published" id="published" label="Publish Equipment?" />
+                    }
+                <Field component={Checkbox} name="published" id="published" label="Publish Equipment?" />
                 <EquipmentTypeSelect errors={errors} touched={touched} />
 
                 {loading && <p>Loading...</p>}
@@ -104,10 +120,10 @@ const EquipmentCreateForm = () => (
               </Form>
             )}
           </Formik>
-        )}
-      </Firebase>
-    )}
-  </Mutation>
-)
+        )
+      }}
+    </Firebase>
+  )
+}
 
 export default EquipmentCreateForm
