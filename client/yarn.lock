@@ -3951,10 +3951,10 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
-formik@^2.0.0-canary.5a8e912:
-  version "2.0.0-canary.5a8e912"
-  resolved "https://registry.yarnpkg.com/formik/-/formik-2.0.0-canary.5a8e912.tgz#b68001909a7a9e0bcec2b8220fe2c28a7f029a84"
-  integrity sha512-VdcHFzfxlrhyUVq+81XVny1+UWWYjgbH11M+S9ghGjvTxWVg3M1ZWmh3GOLHFaAgSkHqgSxmDQy6VIfGu0iIdA==
+formik@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/formik/-/formik-1.3.2.tgz#f97b9e71084db4a51f7bde798584c094b3696738"
+  integrity sha512-WzKX8MGfSJTBF97oDDeP2meb2/I1bi1dLdkICmUfPB2KJ9mcdBOmsOPY8cE1cfV25ML3DzLomYsUezH+yedpvQ==
   dependencies:
     create-react-context "^0.2.2"
     deepmerge "^2.1.1"
@@ -7976,6 +7976,11 @@ react-fast-compare@^2.0.2:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
+
+react-firebase-hooks@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/react-firebase-hooks/-/react-firebase-hooks-0.4.0.tgz#7c12a7080dd9cbb68fed31a4f03f8cc4e623c34e"
+  integrity sha512-+gOFUX80nAMaPf58B5Kjc5fxah5y1VIPMYKrliyq5xYj9/vsgknIkKPUyVv58+Ko3AbWMqR6Jqu+7HnwoMtK9w==
 
 react-is@^16.3.2, react-is@^16.6.0:
   version "16.6.3"

@@ -1,5 +1,5 @@
 import React from 'react'
-import app from '@firebase/app'
+import firebase from '@firebase/app'
 import '@firebase/auth'
 
 import FirebaseContext from './context'
@@ -13,6 +13,8 @@ const config = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 }
 
+firebase.initializeApp(config)
+
 const INITIAL_STATE = {
   user: null,
 }
@@ -20,8 +22,7 @@ const INITIAL_STATE = {
 class FirebaseProvider extends React.Component {
   constructor(props) {
     super(props)
-    app.initializeApp(config)
-    this.auth = app.auth()
+    this.auth = firebase.auth()
     this.state = {
       ...INITIAL_STATE,
       loading: true,
@@ -132,4 +133,9 @@ class FirebaseProvider extends React.Component {
   }
 }
 
-export default FirebaseProvider
+const auth = firebase.auth()
+
+export {
+  FirebaseProvider as default,
+  auth,
+}

@@ -1,10 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import { createGlobalStyle } from 'styled-components'
 import { Normalize } from 'styled-normalize'
 
 import App from './components/App'
-import { ApolloProvider } from './components/Apollo'
+import Apollo, { ApolloProvider } from './components/Apollo'
 import { FirebaseProvider } from './components/Firebase'
 
 const GlobalStyle = createGlobalStyle`
@@ -24,9 +25,15 @@ const GlobalStyle = createGlobalStyle`
 ReactDOM.render(
   <FirebaseProvider>
     <ApolloProvider>
-      <Normalize />
-      <GlobalStyle />
-      <App />
+      <Apollo>
+        {({ client }) => (
+          <ApolloHooksProvider client={client}>
+            <Normalize />
+            <GlobalStyle />
+            <App />
+          </ApolloHooksProvider>
+        )}
+      </Apollo>
     </ApolloProvider>
   </FirebaseProvider>,
   document.getElementById('root'),

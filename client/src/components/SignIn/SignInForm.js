@@ -1,60 +1,44 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import Firebase from '../Firebase'
+import { auth } from '../Firebase'
 
 const INITIAL_STATE = {
   email: '',
   password: '',
-  error: null,
 }
 
-class SignInForm extends React.Component {
-  state = INITIAL_STATE
+const SignInForm = () => {
+  const [form, setForm] = useState(INITIAL_STATE)
+  const [error, setError] = useState(null)
 
-  onSubmit = async (event, signInWithEmailAndPassword) => {
+  const onSubmit = async (event) => {
     event.preventDefault()
 
-    const { email, password } = this.state
-
     try {
-      await signInWithEmailAndPassword(email, password)
-    } catch (error) {
-      this.setState({ error })
+      await auth.signInWithEmailAndPassword(form.email, form.password)
+    } catch (e) {
+      setError(e)
     }
   }
 
-  onChange = event => this.setState({ [event.target.name]: event.target.value })
-
-  render() {
-    const { email, password, error } = this.state
-
-    const isInvalid = password === '' || email === ''
-
-    return (
-      <Firebase>
-        {({ auth }) => (
-          <form onSubmit={event => this.onSubmit(event, auth.signInWithEmailAndPassword)}>
-            <input
-              name="email"
-              value={email}
-              onChange={this.onChange}
-              type="text"
-              placeholder="Email Address"
-            />
-            <input
-              name="password"
-              value={password}
-              onChange={this.onChange}
-              type="password"
-              placeholder="Password"
-            />
-            <button disabled={isInvalid} type="submit">Sign In</button>
-            {error && <p>{error.message}</p>}
-          </form>
-        )}
-      </Firebase>
-    )
+  const onChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    })
   }
+
+  const isInvalid = form.email === '' || form.password === ''
+
+  return (
+    <form onSubmit={onSubmit}>
+      <input name="email" value={form.email} onChange={onChange} type="text" placeholder="Email Address" />
+      <input name="password" value={form.password} onChange={onChange} type="password" placeholder="Password" />
+
+      <button disabled={isInvalid} type="submit">Sign In</button>
+      {error && <p>{error.message}</p>}
+    </form>
+  )
 }
 
 export default SignInForm
