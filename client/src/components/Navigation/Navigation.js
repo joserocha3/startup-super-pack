@@ -1,18 +1,23 @@
 import React from 'react'
-import get from 'lodash.get'
 
-import Firebase from '../Firebase'
 import AuthenticatedNavigation from './AuthenticatedNavigation'
 import PublicNavigation from './PublicNavigation'
 
-const Navigation = () => (
-  <Firebase>
-    {({ auth }) => (
-      get(auth, 'user.uid')
-        ? <AuthenticatedNavigation admin={get(auth, 'user.admin')} />
-        : <PublicNavigation />
-    )}
-  </Firebase>
-)
+import useAuthState from '../../utilities/useAuthState'
+
+const Navigation = () => {
+  const { user } = useAuthState()
+
+  return (
+    user.uid
+      ? (
+        <AuthenticatedNavigation
+          admin={user.admin}
+          client={user.client}
+        />
+      )
+      : <PublicNavigation />
+  )
+}
 
 export default Navigation

@@ -10,9 +10,11 @@
     "parser": "babel-eslint",
     "plugins": [
         "markdown",
-        "json"
+        "json",
+        "react-hooks"
     ],
     "rules": {
+        "react-hooks/rules-of-hooks": "error",
         "react/prop-types": "off",
         "react/jsx-filename-extension": "off",
         "semi": [

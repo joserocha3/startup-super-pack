@@ -1,19 +1,20 @@
 import React from 'react'
 
-import Firebase from '../Firebase'
 import { PasswordResetForm } from '../PasswordReset'
 import PasswordChangeForm from '../PasswordChangeForm'
 
-const Account = () => (
-  <Firebase>
-    {({ auth }) => (
-      <div>
-        <h1>{`Account: ${auth.user.email}`}</h1>
-        <PasswordResetForm />
-        <PasswordChangeForm />
-      </div>
-    )}
-  </Firebase>
-)
+import useAuthState from '../../utilities/useAuthState'
+
+const Account = () => {
+  const { user } = useAuthState()
+
+  return (
+    <div>
+      <h1>{`Account: ${user.email}`}</h1>
+      <PasswordResetForm />
+      <PasswordChangeForm />
+    </div>
+  )
+}
 
 export default Account

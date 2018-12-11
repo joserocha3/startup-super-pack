@@ -1,26 +1,16 @@
 import React from 'react'
-import { gql } from 'apollo-boost'
 import { Query } from 'react-apollo'
 
 import EquipmentCreateForm from './EquipmentCreateForm'
 import EquipmentList from './EquipmentList'
 
-export const EQUIPMENTS_QUERY = gql`
-  query EquipmentsQuery {
-    equipments {
-      id
-      title
-      description
-      status
-    }
-  }
-`
+import queries from '../../queries'
 
 const Equipment = () => (
   <>
     <h1>Equipment</h1>
     <EquipmentCreateForm />
-    <Query query={EQUIPMENTS_QUERY}>
+    <Query query={queries.equipments.ALL_FIELDS}>
       {({ loading, error, data }) => {
         if (loading) return 'Loading...'
         if (error) return `Error! ${error.message}`

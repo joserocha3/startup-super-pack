@@ -1,18 +1,23 @@
 import React from 'react'
-import get from 'lodash.get'
 
-import Firebase from '../Firebase'
 import AuthenticatedRoutes from './AuthenticatedRoutes'
 import PublicRoutes from './PublicRoutes'
 
-const Routes = () => (
-  <Firebase>
-    {({ auth }) => (
-      get(auth, 'user.uid')
-        ? <AuthenticatedRoutes admin={get(auth, 'user.admin')} />
-        : <PublicRoutes />
-    )}
-  </Firebase>
-)
+import useAuthState from '../../utilities/useAuthState'
+
+const Routes = () => {
+  const { user } = useAuthState()
+
+  return (
+    user.uid
+      ? (
+        <AuthenticatedRoutes
+          admin={user.admin}
+          client={user.client}
+        />
+      )
+      : <PublicRoutes />
+  )
+}
 
 export default Routes

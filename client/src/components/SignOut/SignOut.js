@@ -1,21 +1,14 @@
-import React from 'react'
-import get from 'lodash.get'
+import { useApolloClient } from 'react-apollo-hooks'
 
-import Firebase from '../Firebase'
-import Apollo from '../Apollo'
+import useAuthState from '../../utilities/useAuthState'
 
-const SignOut = () => (
-  <Firebase>
-    {({ auth }) => (
-      <Apollo>
-        {({ client }) => {
-          // Apollo caches all query results, get rid of them when the login state changes
-          if (!get(auth, 'user.uid')) client.clearStore()
-          return null
-        }}
-      </Apollo>
-    )}
-  </Firebase>
-)
+const SignOut = () => {
+  const { user } = useAuthState()
+  const client = useApolloClient()
+
+  // Apollo caches all query results, get rid of them when the login state changes
+  if (!user.uid) client.clearStore()
+  return null
+}
 
 export default SignOut

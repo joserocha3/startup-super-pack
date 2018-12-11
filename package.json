@@ -40,5 +40,8 @@
     "styled-components",
     "startup",
     "boilerplate"
-  ]
+  ],
+  "dependencies": {
+    "eslint-plugin-react-hooks": "^0.0.0"
+  }
 }

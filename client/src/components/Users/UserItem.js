@@ -12,7 +12,6 @@ const UserItem = ({ user }) => (
   <li>
     <Field label="ID" text={user.id} />
     <Field label="Email" text={user.email} />
-    <Field label="Firebase ID" text={user.authId} />
     <Field label="First Name" text={user.firstName} />
     <Field label="Last Name" text={user.lastName} />
     <Field label="role" text={user.role} />

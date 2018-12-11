@@ -1,4 +1,4 @@
-import { ApolloClient, ApolloLink, InMemoryCache } from 'apollo-client-preset'
+import { InMemoryCache, ApolloClient, ApolloLink } from 'apollo-client-preset'
 import { createHttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
 import { onError } from 'apollo-link-error'

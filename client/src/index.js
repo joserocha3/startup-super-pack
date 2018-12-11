@@ -1,12 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
+import { ApolloProvider } from 'react-apollo-hooks'
 import { createGlobalStyle } from 'styled-components'
 import { Normalize } from 'styled-normalize'
 
 import App from './components/App'
-import Apollo, { ApolloProvider } from './components/Apollo'
-import { FirebaseProvider } from './components/Firebase'
+import Loading from './components/Loading'
+
+import useAuthState from './utilities/useAuthState'
+import createApolloClient from './utilities/createApolloClient'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -22,19 +24,23 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-ReactDOM.render(
-  <FirebaseProvider>
-    <ApolloProvider>
-      <Apollo>
-        {({ client }) => (
-          <ApolloHooksProvider client={client}>
-            <Normalize />
-            <GlobalStyle />
-            <App />
-          </ApolloHooksProvider>
-        )}
-      </Apollo>
+const Root = () => {
+  const { loading, getIdToken } = useAuthState()
+
+  return loading ? (
+    <>
+      <Normalize />
+      <GlobalStyle />
+      <Loading />
+    </>
+  ) : (
+
+    <ApolloProvider client={createApolloClient(getIdToken)}>
+      <Normalize />
+      <GlobalStyle />
+      <App />
     </ApolloProvider>
-  </FirebaseProvider>,
-  document.getElementById('root'),
-)
+  )
+}
+
+ReactDOM.render(<Root />, document.getElementById('root'))

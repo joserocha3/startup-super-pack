@@ -1,55 +1,45 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import Firebase from '../Firebase'
+import useAuthState from '../../utilities/useAuthState'
 
-const INITIAL_STATE = {
-  email: '',
-  error: null,
-}
+const PasswordResetForm = () => {
+  const [email, setEmail] = useState('')
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const { sendPasswordResetEmail } = useAuthState()
 
-class PasswordResetForm extends React.Component {
-  state = INITIAL_STATE
-
-  onSubmit = async (event, sendPasswordResetEmail) => {
-    event.preventDefault()
-
-    const { email } = this.state
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
 
     try {
       await sendPasswordResetEmail(email)
-      this.setState(INITIAL_STATE)
-    } catch (error) {
-      this.setState({ error })
+    } catch (err) {
+      setError(err)
     }
+
+    setLoading(false)
   }
 
-  onChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value })
-  };
-
-  render() {
-    const { email, error } = this.state
-
-    const isInvalid = email === ''
-
-    return (
-      <Firebase>
-        {({ auth }) => (
-          <form onSubmit={event => this.onSubmit(event, auth.sendPasswordResetEmail)}>
-            <input
-              name="email"
-              value={email}
-              onChange={this.onChange}
-              type="text"
-              placeholder="Email Address"
-            />
-            <button disabled={isInvalid} type="submit">Send Reset Link</button>
-            {error && <p>{error.message}</p>}
-          </form>
-        )}
-      </Firebase>
-    )
+  const onChange = (e) => {
+    setEmail(e.target.value)
   }
+
+  const isInvalid = email === ''
+
+  return (
+    <form onSubmit={onSubmit}>
+      <input
+        name="email"
+        value={email}
+        onChange={onChange}
+        type="text"
+        placeholder="Email Address"
+      />
+      <button disabled={loading || isInvalid} type="submit">Send Reset Link</button>
+      {error && <p>{error.message}</p>}
+    </form>
+  )
 }
 
 export default PasswordResetForm

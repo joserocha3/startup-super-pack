@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { auth } from '../Firebase'
+import { auth } from '../../utilities/firebase'
 
 const INITIAL_STATE = {
   email: '',
@@ -32,9 +32,20 @@ const SignInForm = () => {
 
   return (
     <form onSubmit={onSubmit}>
-      <input name="email" value={form.email} onChange={onChange} type="text" placeholder="Email Address" />
-      <input name="password" value={form.password} onChange={onChange} type="password" placeholder="Password" />
-
+      <input
+        name="email"
+        value={form.email}
+        onChange={onChange}
+        type="text"
+        placeholder="Email Address"
+      />
+      <input
+        name="password"
+        value={form.password}
+        onChange={onChange}
+        type="password"
+        placeholder="Password"
+      />
       <button disabled={isInvalid} type="submit">Sign In</button>
       {error && <p>{error.message}</p>}
     </form>
