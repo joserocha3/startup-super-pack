@@ -9,6 +9,15 @@ const ME = gql`
   }
 `
 
+const EMAIL = gql`
+  {
+    users {
+      id
+      email
+    }
+  }
+`
+
 const ALL_FIELDS = gql`
 {
   users {
@@ -23,6 +32,7 @@ const ALL_FIELDS = gql`
 
 const users = {
   ME,
+  EMAIL,
   ALL_FIELDS,
 }
 

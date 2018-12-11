@@ -21,7 +21,7 @@ The back-end will be the heart  startup.
 
 Once on board your customers will need somewhere to login to use your service.
 
-- Custom `create-react-app` --> [found out more](https://github.com/joserocha3/create-react-app-eslintless)!
+- Custom `create-react-app` --> [find out more](https://github.com/joserocha3/create-react-app-eslintless)!
   - `eslint` integration removed
   - Better debugging for `styled-components`
 - Sign up and login using Firebase authentication
