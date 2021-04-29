@@ -30,7 +30,7 @@ Deploys to Prisma are initiated using the `$ yarn deploy` command. That command 
 
 ### Heroku
 
-In the Heroku dashboard you can create an app, then under the deploy section link your repository. [This buildpack](https://github.com/lstoll/heroku-buildpack-monorepo) and the `heroku-postbuild` script will assure Heroku properly builds and starts your app.
+In the Heroku dashboard you can create an app, then under the deploy section link your repository. Add [this buildpack](https://github.com/lstoll/heroku-buildpack-monorepo), then add the node js buildpack _below_ it. The buildpack and the `heroku-postbuild` script will assure Heroku properly builds and starts your app.
 
 ## Commands
 
