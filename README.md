@@ -14,7 +14,7 @@ The back-end will be the heart  startup.
 
 - Served using Apollo V2
 - Database layer provided by Prisma
-- Heroku deployment ready Procfile
+- Heroku deployment ready with [this buildpack](https://github.com/lstoll/heroku-buildpack-monorepo)
 - Built authentication with Firebase
 
 ### Client
