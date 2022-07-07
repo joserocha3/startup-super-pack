@@ -22,7 +22,7 @@
     "graphql": "^14.0.2",
     "graphql-import": "^0.7.1",
     "graphql-tools": "^4.0.3",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "prisma-binding": "^2.2.8",
     "prisma-client-lib": "^1.21.0",
     "yup": "^0.26.6"
